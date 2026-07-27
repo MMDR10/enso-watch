@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌊 ENSO Watch — 聖嬰預警儀表板</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,'Segoe UI',sans-serif;background:#0a0e17;color:#e0e6f0;min-height:100vh;display:flex;justify-content:center;padding:16px}
+.dashboard{max-width:680px;width:100%}
+.header{text-align:center;padding:24px 0 8px}
+.header h1{font-size:1.6rem;font-weight:700;color:#fff}
+.header .sub{font-size:.8rem;color:#6b7280;margin-top:4px}
+.card{background:#111827;border-radius:16px;padding:20px;margin-bottom:14px;border:1px solid #1f2937}
+.card-title{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;margin-bottom:12px}
+.warning-box{text-align:center;padding:28px 20px}
+.warning-light{font-size:4rem;margin-bottom:8px}
+.warning-level{font-size:1.4rem;font-weight:700;margin-bottom:4px}
+.warning-detail{font-size:.82rem;color:#9ca3af;line-height:1.5}
+.oni-big{font-size:3.2rem;font-weight:800;text-align:center;padding:8px 0}
+.oni-label{text-align:center;font-size:.82rem;color:#6b7280}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.metric{background:#1a2235;border-radius:10px;padding:14px;text-align:center}
+.metric .val{font-size:1.5rem;font-weight:700}
+.metric .lbl{font-size:.68rem;color:#6b7280;margin-top:3px;text-transform:uppercase;letter-spacing:.05em}
+.detector-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #1f2937;font-size:.85rem}
+.detector-row:last-child{border-bottom:none}
+.detector-row .name{font-weight:600;color:#d1d5db}
+.detector-row .val{font-family:monospace;font-size:.85rem;color:#9ca3af}
+.badge{padding:3px 10px;border-radius:12px;font-size:.75rem;font-weight:600;text-align:center;min-width:64px}
+.badge-red{background:#7f1d1d;color:#fca5a5}
+.badge-orange{background:#78350f;color:#fcd34d}
+.badge-yellow{background:#713f12;color:#fde047}
+.badge-green{background:#14532d;color:#86efac}
+.badge-grey{background:#374151;color:#9ca3af}
+.timeline{font-size:.75rem;color:#6b7280;text-align:center;padding:8px}
+.multiscale-bar{display:flex;gap:4px;align-items:flex-end;height:80px;margin:10px 0}
+.ms-bar{flex:1;border-radius:3px 3px 0 0;position:relative;min-width:8px}
+.ms-bar-label{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-size:.58rem;color:#6b7280;white-space:nowrap}
+.d2h-box{background:#1a2235;border-radius:10px;padding:16px;text-align:center;margin:10px 0}
+.d2h-box .big{font-size:2rem;font-weight:800}
+.d2h-box .sub{font-size:.72rem;color:#6b7280;margin-top:4px}
+footer{text-align:center;padding:16px;font-size:.7rem;color:#4b5563}
+a{color:#60a5fa}
+.spinner{width:30px;height:30px;border:3px solid #1f2937;border-top:3px solid #60a5fa;border-radius:50%;animation:spin 1s linear infinite;margin:40px auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="dashboard" id="app">
+<div class="spinner" id="loading"></div>
+</div>
+<footer>數據來源：NOAA CPC · 自動更新 · <span id="genTime"></span> · <a href="https://github.com/MMDR10/enso-watch" target="_blank">GitHub</a></footer>
+
+<script>
+async function load() {
+  try {
+    const r = await fetch('dashboard_data.json');
+    const d = await r.json();
+    render(d);
+  } catch(e) {
+    document.getElementById('app').innerHTML = 
+      '<div class="card" style="text-align:center;padding:40px"><p>⚠️ 無法載入數據</p><p style="font-size:.8rem;color:#6b7280">請確認 dashboard_data.json 存在</p></div>';
+  }
+}
+
+function render(d) {
+  const phaseColors = {'El Niño':'#ef4444','La Niña':'#3b82f6','Neutral':'#6b7280'};
+  const phaseEmoji = {'El Niño':'🔴','La Niña':'🔵','Neutral':'⚪'};
+  
+  // Multiscale bar heights
+  const ms = d.detector_a_multiscale.window_sweep;
+  const dhVals = Object.entries(ms).map(([w,v])=>[parseInt(w),v.dh_latest]).sort((a,b)=>a[0]-b[0]);
+  const maxAbs = Math.max(...dhVals.map(v=>Math.abs(v[1])), 0.5);
+  
+  let msBars = dhVals.map(([w,v])=>{
+    const h = Math.abs(v)/maxAbs*60;
+    const color = v<0 ? '#ef4444' : '#22c55e';
+    const y = v<0 ? 60-h : 60;
+    return `<div class="ms-bar" style="height:${h}px;background:${color};margin-top:${y}px">
+      <span class="ms-bar-label">${w}mo</span></div>`;
+  }).join('');
+  
+  const detA = d.detector_a_multiscale;
+  const detC = d.detector_c_gaussianity;
+  const detD = d.detector_d_theta1;
+  const detB = d.detector_b_chi_eff;
+  
+  document.getElementById('app').innerHTML = `
+<div class="header">
+  <h1>🌊 ENSO Watch</h1>
+  <div class="sub">聖嬰／反聖嬰 多維度預警儀表板 · ${d.generated}</div>
+</div>
+
+<!-- ONI -->
+<div class="card">
+  <div class="card-title">🌡️ 最新海洋聖嬰指數 (ONI)</div>
+  <div class="oni-big" style="color:${d.latest.oni>=0.5?'#ef4444':d.latest.oni<=-0.5?'#3b82f6':'#9ca3af'}">
+    ${d.latest.oni>=0?'+':''}${d.latest.oni.toFixed(2)}°C
+  </div>
+  <div class="oni-label">${d.latest.date} · ${phaseEmoji[d.latest.oni_phase]} ${d.latest.oni_phase}</div>
+</div>
+
+<!-- Composite -->
+<div class="card warning-box" style="border-color:${d.composite.includes('CLEAR')?'#14532d':d.composite.includes('CRITICAL')?'#7f1d1d':'#713f12'}">
+  <div class="warning-light">${d.composite.includes('CLEAR')?'🟢':d.composite.includes('CRITICAL')?'🔴':'🟡'}</div>
+  <div class="warning-level" style="color:${d.composite.includes('CLEAR')?'#86efac':d.composite.includes('CRITICAL')?'#fca5a5':'#fde047'}">${d.composite}</div>
+  <div class="warning-detail">四探測器綜合判定</div>
+</div>
+
+<!-- Detector A: Multi-Scale Δ²H -->
+<div class="card">
+  <div class="card-title">🔬 Detector A — 多尺度熱力剪切力 (Δ²H)</div>
+  <div class="multiscale-bar">${msBars}</div>
+  <div class="d2h-box">
+    <div class="big" style="color:${detA.d2h<0?'#ef4444':'#22c55e'}">Δ²H = ${detA.d2h>0?'+':''}${detA.d2h.toFixed(3)}</div>
+    <div class="sub">ΔH_short (12mo) = ${detA.dh_short>0?'+':''}${detA.dh_short.toFixed(3)} · ΔH_long (60mo) = ${detA.dh_long>0?'+':''}${detA.dh_long.toFixed(3)} · W₀ = ${detA.w0_months||'N/A'} 月</div>
+  </div>
+  <div style="text-align:center;margin-top:8px">
+    <span class="badge badge-${detA.level}">${detA.emoji} ${detA.state}</span>
+    <div style="font-size:.78rem;color:#9ca3af;margin-top:6px">
+      ${detA.state==='SHEAR INVERSION' ? '短波深層熱流已反轉，長波背景未反應 — 海底暗流已動' :
+        detA.state==='DEEP ACCUMULATION' ? '全尺度熱庫正常累積中' :
+        detA.state==='FULL REGIME SHIFT' ? '全尺度相變 — 深層熱量全面翻湧' : ''}
+    </div>
+  </div>
+</div>
+
+<!-- All 4 Detectors -->
+<div class="card">
+  <div class="card-title">📊 四探測器全景</div>
+  <div class="detector-row">
+    <span class="name">A · Multi-Scale Δ²H</span>
+    <span class="val">${detA.d2h>0?'+':''}${detA.d2h.toFixed(3)}</span>
+    <span class="badge badge-${detA.level}">${detA.emoji}</span>
+  </div>
+  <div class="detector-row">
+    <span class="name">B · χ_eff 剛性</span>
+    <span class="val">${detB.value.toFixed(1)}</span>
+    <span class="badge badge-${detB.level}">✅</span>
+  </div>
+  <div class="detector-row">
+    <span class="name">C · Gaussianity 疊加</span>
+    <span class="val">QQ r=${detC.qq_r.toFixed(4)} (${detC.percentile}%ile)</span>
+    <span class="badge badge-${detC.level}">${detC.level==='green'?'🟢':detC.level==='yellow'?'🟡':'🔴'}</span>
+  </div>
+  <div class="detector-row">
+    <span class="name">D · θ₁ 幾何骨架</span>
+    <span class="val">${detD.value.toFixed(1)}° (avg ${detD.mean.toFixed(1)}°)</span>
+    <span class="badge badge-${detD.level}">${detD.level==='green'?'🟢':detD.level==='yellow'?'🟡':'🔴'}</span>
+  </div>
+</div>
+
+<!-- History -->
+<div class="card">
+  <div class="card-title">📈 歷史基準</div>
+  <div class="metrics">
+    <div class="metric"><div class="val">${d.history.H_mean.toFixed(3)}</div><div class="lbl">Helicity (H)</div></div>
+    <div class="metric"><div class="val">${d.history.theta1_latest.toFixed(1)}°</div><div class="lbl">Bridge θ₁</div></div>
+    <div class="metric"><div class="val">${d.history.chi_eff.toFixed(1)}</div><div class="lbl">χ_eff 剛性</div></div>
+    <div class="metric"><div class="val">${detC.qq_r.toFixed(4)}</div><div class="lbl">QQ r 高斯性</div></div>
+  </div>
+</div>
+`;
+  document.getElementById('genTime').textContent = d.generated;
+}
+
+load();
+</script>
+</body>
+</html>
