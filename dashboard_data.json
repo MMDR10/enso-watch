@@ -1,0 +1,79 @@
+{
+  "generated": "2026-07-27 13:34 UTC",
+  "source": "NOAA CPC ONI",
+  "latest": {
+    "date": "2026-05",
+    "oni": 0.98,
+    "oni_phase": "El Niño",
+    "oni_emoji": "🔴"
+  },
+  "detector_a_multiscale": {
+    "state": "SHEAR INVERSION",
+    "emoji": "🟡",
+    "level": "yellow",
+    "dh_short": -0.4506,
+    "dh_long": 0.444,
+    "d2h": -0.8946,
+    "w0_months": 28.6,
+    "window_sweep": {
+      "12": {
+        "dh_latest": -0.4506,
+        "dh_mean": 0.0493,
+        "inv_rate": 0.497
+      },
+      "18": {
+        "dh_latest": -0.0993,
+        "dh_mean": 0.2301,
+        "inv_rate": 0.25
+      },
+      "24": {
+        "dh_latest": -0.5907,
+        "dh_mean": 0.4653,
+        "inv_rate": 0.121
+      },
+      "30": {
+        "dh_latest": 0.1765,
+        "dh_mean": 0.4837,
+        "inv_rate": 0.081
+      },
+      "36": {
+        "dh_latest": 0.4146,
+        "dh_mean": 0.4848,
+        "inv_rate": 0.058
+      },
+      "48": {
+        "dh_latest": 0.3633,
+        "dh_mean": 0.4925,
+        "inv_rate": 0.048
+      },
+      "60": {
+        "dh_latest": 0.444,
+        "dh_mean": 0.4866,
+        "inv_rate": 0.035
+      }
+    }
+  },
+  "detector_b_chi_eff": {
+    "value": 4.5,
+    "level": "green"
+  },
+  "detector_c_gaussianity": {
+    "qq_r": 0.9818,
+    "percentile": 86.6,
+    "level": "green",
+    "description": "Multi-source superposition integrity"
+  },
+  "detector_d_theta1": {
+    "value": 6.0,
+    "mean": 9.8,
+    "level": "green",
+    "description": "Geometric skeleton normal"
+  },
+  "composite": "🟡 WATCH",
+  "history": {
+    "H_mean": 1.52,
+    "theta1_latest": 6.0,
+    "theta1_mean": 9.8,
+    "chi_eff": 4.5
+  }
+}

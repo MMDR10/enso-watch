@@ -1,0 +1,45 @@
+name: ENSO Watch Auto-Update
+
+on:
+  schedule:
+    # NOAA updates ONI around the 8th of each month
+    # Run on the 9th, 15th, and 22nd to catch any delays
+    - cron: '0 6 9,15,22 * *'
+  workflow_dispatch:  # manual trigger
+  push:
+    paths:
+      - 'enso_auto_update.py'
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: pip install numpy scipy
+      
+      - name: Run ENSO auto-update
+        run: python enso_auto_update.py
+      
+      - name: Commit & push if changed
+        run: |
+          git config user.name "ENSO Watch Bot"
+          git config user.email "enso-watch@github.com"
+          git add dashboard_data.json
+          if git diff --cached --quiet; then
+            echo "No changes. ENSO status unchanged."
+          else
+            git commit -m "🔄 ENSO auto-update $(date +%Y-%m-%d)"
+            git push
+            echo "✅ Updated and pushed."
+          fi
