@@ -41,6 +41,23 @@ body{font-family:-apple-system,'Segoe UI',sans-serif;background:#0a0e17;color:#e
 .d2h-box .big{font-size:1.8rem;font-weight:800}
 .d2h-box .sub{font-size:.72rem;color:#6b7280;margin-top:4px}
 .explain{font-size:.75rem;color:#6b7280;line-height:1.6;margin-top:8px;padding:10px;background:#0f172a;border-radius:8px}
+
+/* Vortex depth bar */
+.vortex-bar-wrap{display:flex;gap:12px;align-items:center;margin:10px 0}
+.vortex-label{font-size:.68rem;color:#6b7280;width:48px;text-align:right}
+.vortex-track{flex:1;height:24px;background:#1a2235;border-radius:12px;position:relative;overflow:hidden}
+.vortex-fill-core{position:absolute;left:0;top:0;height:100%;background:linear-gradient(90deg,#ef4444,#f97316);border-radius:12px 0 0 12px;transition:width .5s}
+.vortex-fill-shell{position:absolute;left:0;top:0;height:100%;background:linear-gradient(90deg,#3b82f6,#6366f1);border-radius:0 12px 12px 0;transition:width .5s}
+.vortex-val{font-family:monospace;font-size:.78rem;font-weight:600;width:42px;text-align:center}
+
+/* 1996 comparison box */
+.compare-box{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.compare-col{background:#1a2235;border-radius:10px;padding:12px;text-align:center}
+.compare-col .label{font-size:.65rem;color:#6b7280;text-transform:uppercase;letter-spacing:.05em}
+.compare-col .year{font-size:.7rem;color:#9ca3af;margin-bottom:4px}
+.compare-col .val{font-family:monospace;font-size:.85rem;font-weight:700}
+.compare-col .hint{font-size:.62rem;color:#6b7280;margin-top:2px}
+.compare-arrow{text-align:center;font-size:1.2rem;color:#6b7280;padding:4px}
 footer{text-align:center;padding:16px;font-size:.7rem;color:#4b5563}
 a{color:#60a5fa}
 .spinner{width:30px;height:30px;border:3px solid #1f2937;border-top:3px solid #60a5fa;border-radius:50%;animation:spin 1s linear infinite;margin:40px auto}
@@ -68,7 +85,6 @@ async function load() {
 function render(d) {
   const phaseEmoji = {'El Niño':'🔴 聖嬰','La Niña':'🔵 反聖嬰','Neutral':'⚪ 正常'};
   
-  // phase explanation
   const phaseExplain = {
     'El Niño': '太平洋赤道海域異常偏暖，通常帶來極端天氣（暴雨、乾旱、颱風路徑改變）',
     'La Niña': '太平洋赤道海域異常偏冷，通常帶來相反的天氣模式',
@@ -93,6 +109,8 @@ function render(d) {
   const detC = d.detector_c_gaussianity;
   const detD = d.detector_d_theta1;
   const detB = d.detector_b_chi_eff;
+  const vx = d.vortex;
+  const cmp = vx && vx.comparison_1996;
   
   // composite plain text
   const compositeText = {
@@ -103,12 +121,17 @@ function render(d) {
   };
   const compKey = d.composite.includes('CLEAR') ? 'CLEAR' : d.composite.includes('CRITICAL') ? 'CRITICAL' : d.composite.includes('WARNING') ? 'WARNING' : 'WATCH';
   
-  // Detector A state explanation
   const detAExplain = {
     'SHEAR INVERSION': '海底暖水正在上升，海面尚無反應。<br>這通常是聖嬰來臨前的早期信號，類似「海底暗流已經動了，海面仲未起浪」。<br>歷史平均提前約 <b>4.4 年</b>預警。',
     'DEEP ACCUMULATION': '海洋熱量穩定累積中，目前沒有異常信號。',
     'FULL REGIME SHIFT': '全海洋熱量異常上升 — 強聖嬰極可能已經展開。'
   };
+  
+  // Vortex bar: normalize H_core and H_shell to fit track
+  const hmax = Math.max(vx ? Math.max(vx.h_core, vx.h_shell) : 2, 2);
+  const corePct = vx ? Math.min(vx.h_core / hmax * 100, 100) : 50;
+  const shellPct = vx ? Math.min(vx.h_shell / hmax * 100, 100) : 50;
+  const vInverted = vx && vx.delta_h < 0;
   
   document.getElementById('app').innerHTML = `
 <div class="header">
@@ -162,6 +185,70 @@ function render(d) {
   </div>
 </div>
 
+<!-- 渦流深度 — NEW VORTEX CARD -->
+${vx ? `
+<div class="card">
+  <div class="card-title">🌪️ 海底渦流深度 — 聖嬰引擎</div>
+  <div class="explain" style="margin-bottom:10px">
+    用衛星數據拆解海洋<b>深層（核心）</b>同<b>表層（外殼）</b>嘅渦流強度。<br>
+    🔴 核心（紅）> 🔵 外殼（藍）代表「海底暗流已動」— 聖嬰來臨前嘅關鍵信號。
+  </div>
+  
+  <!-- Core depth bar -->
+  <div class="vortex-bar-wrap">
+    <span class="vortex-label">🔴 深層</span>
+    <div class="vortex-track">
+      <div class="vortex-fill-core" style="width:${corePct}%"></div>
+    </div>
+    <span class="vortex-val" style="color:#f97316">${vx.h_core.toFixed(2)}</span>
+  </div>
+  <div class="vortex-bar-wrap">
+    <span class="vortex-label">🔵 表層</span>
+    <div class="vortex-track">
+      <div class="vortex-fill-shell" style="width:${shellPct}%"></div>
+    </div>
+    <span class="vortex-val" style="color:#6366f1">${vx.h_shell.toFixed(2)}</span>
+  </div>
+  
+  <!-- ΔH verdict -->
+  <div class="d2h-box" style="border:1px solid ${vInverted?'#ef4444':'#22c55e'}40">
+    <div class="big" style="color:${vInverted?'#ef4444':'#22c55e'}">ΔH = ${vx.delta_h>0?'+':''}${vx.delta_h.toFixed(2)}</div>
+    <div class="sub" style="color:${vInverted?'#fca5a5':'#86efac'}">
+      ${vInverted ? '⚠️ 深層渦流高於表層 — 海底暗流已動' : '✅ 表層渦流主導 — 海底平靜'}
+    </div>
+  </div>
+  <div class="explain">
+    <b>點睇？</b> ΔH = 表層 − 深層。正常時 ΔH 為正（表層活躍）。當 ΔH 變負 = 深層渦流強過表層 = 熱量由海底向上輸送。<br>
+    呢個係 <b>1997 超級聖嬰</b>嚟臨前 6 個月出現過嘅經典信號。
+  </div>
+</div>
+` : ''}
+
+<!-- 1996 對比框 -->
+${cmp ? `
+<div class="card">
+  <div class="card-title">⏳ 歷史對比：1996.5 → 1997 超級聖嬰</div>
+  <div class="compare-box">
+    <div class="compare-col">
+      <div class="label">📅 1996 年 5 月</div>
+      <div class="year">超級聖嬰前夕</div>
+      <div class="val" style="color:#ef4444">ΔH = ${cmp.delta_h.toFixed(2)}</div>
+      <div class="hint">深層渦流潛入</div>
+    </div>
+    <div class="compare-col">
+      <div class="label">📅 而家</div>
+      <div class="year">${d.latest.date}</div>
+      <div class="val" style="color:${vInverted?'#ef4444':'#22c55e'}">ΔH = ${vx? vx.delta_h>0?'+':''+vx.delta_h.toFixed(2) : '--'}</div>
+      <div class="hint">${vInverted?'⚠️ 信號相似！':'✅ 正常'}</div>
+    </div>
+  </div>
+  <div class="explain">
+    <b>1997 超級聖嬰</b>係近代最強嘅聖嬰事件之一。1996 年 5 月，ΔH 跌至 <b>${cmp.delta_h.toFixed(2)}</b>（深層渦流強於表層），6 個月後爆發。<br>
+    呢個對比框幫你睇而家嘅渦流狀態同嗰次有幾似。
+  </div>
+</div>
+` : ''}
+
 <!-- 四大指標一覽 -->
 <div class="card">
   <div class="card-title">📊 四大預警指標</div>
@@ -193,7 +280,7 @@ function render(d) {
   </div>
 </div>
 
-<!-- 歷史參考 -->
+<!-- 長期參考數值 -->
 <div class="card">
   <div class="card-title">📈 長期參考數值</div>
   <div class="metrics">

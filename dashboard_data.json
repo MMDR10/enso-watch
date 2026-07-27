@@ -1,5 +1,5 @@
 {
-  "generated": "2026-07-27 13:34 UTC",
+  "generated": "2026-07-27 14:42 UTC",
   "source": "NOAA CPC ONI",
   "latest": {
     "date": "2026-05",
@@ -54,7 +54,7 @@
     }
   },
   "detector_b_chi_eff": {
-    "value": 4.5,
+    "value": 4.6,
     "level": "green"
   },
   "detector_c_gaussianity": {
@@ -74,6 +74,20 @@
     "H_mean": 1.52,
     "theta1_latest": 6.0,
     "theta1_mean": 9.8,
-    "chi_eff": 4.5
+    "chi_eff": 4.6
+  },
+  "vortex": {
+    "h_core": 1.13,
+    "h_shell": 1.55,
+    "delta_h": 0.41,
+    "inverted": false,
+    "label": "渦流正常",
+    "comparison_1996": {
+      "h_core": 1.66,
+      "h_shell": 1.35,
+      "delta_h": -0.32,
+      "label": "1996.5 → 1997 Super El Niño",
+      "result": "提前 6 個月預警超級聖嬰"
+    }
   }
 }
