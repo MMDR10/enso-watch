@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🌊 ENSO Watch — 聖嬰預警儀表板</title>
+<title>🌊 聖嬰預警看板 — 一睇就明</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,'Segoe UI',sans-serif;background:#0a0e17;color:#e0e6f0;min-height:100vh;display:flex;justify-content:center;padding:16px}
@@ -25,8 +25,8 @@ body{font-family:-apple-system,'Segoe UI',sans-serif;background:#0a0e17;color:#e
 .metric .lbl{font-size:.68rem;color:#6b7280;margin-top:3px;text-transform:uppercase;letter-spacing:.05em}
 .detector-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #1f2937;font-size:.85rem}
 .detector-row:last-child{border-bottom:none}
-.detector-row .name{font-weight:600;color:#d1d5db}
-.detector-row .val{font-family:monospace;font-size:.85rem;color:#9ca3af}
+.detector-row .name{font-weight:600;color:#d1d5db;min-width:130px}
+.detector-row .val{font-family:monospace;font-size:.78rem;color:#9ca3af;flex:1;text-align:center}
 .badge{padding:3px 10px;border-radius:12px;font-size:.75rem;font-weight:600;text-align:center;min-width:64px}
 .badge-red{background:#7f1d1d;color:#fca5a5}
 .badge-orange{background:#78350f;color:#fcd34d}
@@ -38,8 +38,9 @@ body{font-family:-apple-system,'Segoe UI',sans-serif;background:#0a0e17;color:#e
 .ms-bar{flex:1;border-radius:3px 3px 0 0;position:relative;min-width:8px}
 .ms-bar-label{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-size:.58rem;color:#6b7280;white-space:nowrap}
 .d2h-box{background:#1a2235;border-radius:10px;padding:16px;text-align:center;margin:10px 0}
-.d2h-box .big{font-size:2rem;font-weight:800}
+.d2h-box .big{font-size:1.8rem;font-weight:800}
 .d2h-box .sub{font-size:.72rem;color:#6b7280;margin-top:4px}
+.explain{font-size:.75rem;color:#6b7280;line-height:1.6;margin-top:8px;padding:10px;background:#0f172a;border-radius:8px}
 footer{text-align:center;padding:16px;font-size:.7rem;color:#4b5563}
 a{color:#60a5fa}
 .spinner{width:30px;height:30px;border:3px solid #1f2937;border-top:3px solid #60a5fa;border-radius:50%;animation:spin 1s linear infinite;margin:40px auto}
@@ -50,7 +51,7 @@ a{color:#60a5fa}
 <div class="dashboard" id="app">
 <div class="spinner" id="loading"></div>
 </div>
-<footer>數據來源：NOAA CPC · 自動更新 · <span id="genTime"></span> · <a href="https://github.com/MMDR10/enso-watch" target="_blank">GitHub</a></footer>
+<footer>數據來源：美國 NOAA · 每月自動更新 · <span id="genTime"></span> · <a href="https://github.com/MMDR10/enso-watch" target="_blank">GitHub</a></footer>
 
 <script>
 async function load() {
@@ -60,13 +61,19 @@ async function load() {
     render(d);
   } catch(e) {
     document.getElementById('app').innerHTML = 
-      '<div class="card" style="text-align:center;padding:40px"><p>⚠️ 無法載入數據</p><p style="font-size:.8rem;color:#6b7280">請確認 dashboard_data.json 存在</p></div>';
+      '<div class="card" style="text-align:center;padding:40px"><p>⚠️ 無法載入數據</p><p style="font-size:.8rem;color:#6b7280">請檢查網絡連接後重新整理</p></div>';
   }
 }
 
 function render(d) {
-  const phaseColors = {'El Niño':'#ef4444','La Niña':'#3b82f6','Neutral':'#6b7280'};
-  const phaseEmoji = {'El Niño':'🔴','La Niña':'🔵','Neutral':'⚪'};
+  const phaseEmoji = {'El Niño':'🔴 聖嬰','La Niña':'🔵 反聖嬰','Neutral':'⚪ 正常'};
+  
+  // phase explanation
+  const phaseExplain = {
+    'El Niño': '太平洋赤道海域異常偏暖，通常帶來極端天氣（暴雨、乾旱、颱風路徑改變）',
+    'La Niña': '太平洋赤道海域異常偏冷，通常帶來相反的天氣模式',
+    'Neutral': '海水溫度在正常範圍內，沒有異常信號'
+  };
   
   // Multiscale bar heights
   const ms = d.detector_a_multiscale.window_sweep;
@@ -77,8 +84,9 @@ function render(d) {
     const h = Math.abs(v)/maxAbs*60;
     const color = v<0 ? '#ef4444' : '#22c55e';
     const y = v<0 ? 60-h : 60;
+    const yr = Math.round(w/12*10)/10;
     return `<div class="ms-bar" style="height:${h}px;background:${color};margin-top:${y}px">
-      <span class="ms-bar-label">${w}mo</span></div>`;
+      <span class="ms-bar-label">${yr}年</span></div>`;
   }).join('');
   
   const detA = d.detector_a_multiscale;
@@ -86,79 +94,113 @@ function render(d) {
   const detD = d.detector_d_theta1;
   const detB = d.detector_b_chi_eff;
   
+  // composite plain text
+  const compositeText = {
+    'CLEAR': '一切正常 — 四項指標均無異常',
+    'WATCH': '持續觀察 — 有指標出現輕微變化，建議留意',
+    'WARNING': '高度警戒 — 多項指標異常，聖嬰可能正在形成',
+    'CRITICAL': '極度危險 — 強聖嬰信號明確，請做好防災準備'
+  };
+  const compKey = d.composite.includes('CLEAR') ? 'CLEAR' : d.composite.includes('CRITICAL') ? 'CRITICAL' : d.composite.includes('WARNING') ? 'WARNING' : 'WATCH';
+  
+  // Detector A state explanation
+  const detAExplain = {
+    'SHEAR INVERSION': '海底暖水正在上升，海面尚無反應。<br>這通常是聖嬰來臨前的早期信號，類似「海底暗流已經動了，海面仲未起浪」。<br>歷史平均提前約 <b>4.4 年</b>預警。',
+    'DEEP ACCUMULATION': '海洋熱量穩定累積中，目前沒有異常信號。',
+    'FULL REGIME SHIFT': '全海洋熱量異常上升 — 強聖嬰極可能已經展開。'
+  };
+  
   document.getElementById('app').innerHTML = `
 <div class="header">
-  <h1>🌊 ENSO Watch</h1>
-  <div class="sub">聖嬰／反聖嬰 多維度預警儀表板 · ${d.generated}</div>
+  <h1>🌊 聖嬰預警看板</h1>
+  <div class="sub">一眼睇明 · 唔需要科學背景 · ${d.generated}</div>
 </div>
 
-<!-- ONI -->
+<!-- 咩係聖嬰 -->
 <div class="card">
-  <div class="card-title">🌡️ 最新海洋聖嬰指數 (ONI)</div>
-  <div class="oni-big" style="color:${d.latest.oni>=0.5?'#ef4444':d.latest.oni<=-0.5?'#3b82f6':'#9ca3af'}">
-    ${d.latest.oni>=0?'+':''}${d.latest.oni.toFixed(2)}°C
+  <div class="card-title">📖 咩係聖嬰？</div>
+  <div class="explain">
+    聖嬰現象（El Niño）係太平洋赤道附近海水<b>異常變暖</b>嘅自然現象，每隔 2-7 年發生一次。<br>
+    佢會令全球天氣大亂：東南亞乾旱、南美暴雨、颱風路徑改變、農作物失收。<br>
+    呢個看板用 <b>四個獨立指標</b> 幫你提早睇到聖嬰來臨嘅信號。
   </div>
-  <div class="oni-label">${d.latest.date} · ${phaseEmoji[d.latest.oni_phase]} ${d.latest.oni_phase}</div>
 </div>
 
-<!-- Composite -->
+<!-- 現在溫度 -->
+<div class="card">
+  <div class="card-title">🌡️ 目前太平洋赤道海水溫度</div>
+  <div class="oni-big" style="color:${d.latest.oni>=0.5?'#ef4444':d.latest.oni<=-0.5?'#3b82f6':'#9ca3af'}">
+    ${d.latest.oni>=0?'偏高 ':''}${d.latest.oni<=-0.5?'偏低 ':''}${Math.abs(d.latest.oni).toFixed(1)}°C
+  </div>
+  <div class="oni-label">${d.latest.date} · ${phaseEmoji[d.latest.oni_phase]}</div>
+  <div class="explain">${phaseExplain[d.latest.oni_phase]}</div>
+</div>
+
+<!-- 總體判定 -->
 <div class="card warning-box" style="border-color:${d.composite.includes('CLEAR')?'#14532d':d.composite.includes('CRITICAL')?'#7f1d1d':'#713f12'}">
   <div class="warning-light">${d.composite.includes('CLEAR')?'🟢':d.composite.includes('CRITICAL')?'🔴':'🟡'}</div>
-  <div class="warning-level" style="color:${d.composite.includes('CLEAR')?'#86efac':d.composite.includes('CRITICAL')?'#fca5a5':'#fde047'}">${d.composite}</div>
-  <div class="warning-detail">四探測器綜合判定</div>
+  <div class="warning-level" style="color:${d.composite.includes('CLEAR')?'#86efac':d.composite.includes('CRITICAL')?'#fca5a5':'#fde047'}">${d.composite.includes('CLEAR')?'一切正常':d.composite.includes('CRITICAL')?'極度危險':d.composite.includes('WARNING')?'高度警戒':'持續觀察'}</div>
+  <div class="warning-detail">${compositeText[compKey]}</div>
 </div>
 
-<!-- Detector A: Multi-Scale Δ²H -->
+<!-- 最重要的指標：海洋熱量變化 -->
 <div class="card">
-  <div class="card-title">🔬 Detector A — 多尺度熱力剪切力 (Δ²H)</div>
+  <div class="card-title">🔬 最重要指標 — 海洋熱量趨勢</div>
+  <div class="explain" style="margin-bottom:10px">
+    呢個指標睇海洋由淺到深嘅<b>熱量變化方向</b>。綠色 = 熱量正常散走，紅色 = 熱量開始累積。<br>
+    當短期（1年）開始變紅、長期（5年）仲係綠色，代表「海底暗流已動」— 係最關鍵嘅早期信號。
+  </div>
   <div class="multiscale-bar">${msBars}</div>
+  <div style="text-align:center;font-size:.68rem;color:#4b5563;margin-top:20px">← 短週期（近期變化）　　　　　　　　長週期（長期趨勢）→</div>
   <div class="d2h-box">
-    <div class="big" style="color:${detA.d2h<0?'#ef4444':'#22c55e'}">Δ²H = ${detA.d2h>0?'+':''}${detA.d2h.toFixed(3)}</div>
-    <div class="sub">ΔH_short (12mo) = ${detA.dh_short>0?'+':''}${detA.dh_short.toFixed(3)} · ΔH_long (60mo) = ${detA.dh_long>0?'+':''}${detA.dh_long.toFixed(3)} · W₀ = ${detA.w0_months||'N/A'} 月</div>
+    <div class="big" style="color:${detA.d2h<0?'#ef4444':'#22c55e'}">熱量趨勢指數 ${detA.d2h>0?'+':''}${detA.d2h.toFixed(3)}</div>
+    <div class="sub">近 1 年變化 ${detA.dh_short>0?'+':''}${detA.dh_short.toFixed(3)} · 近 5 年變化 ${detA.dh_long>0?'+':''}${detA.dh_long.toFixed(3)}</div>
   </div>
   <div style="text-align:center;margin-top:8px">
-    <span class="badge badge-${detA.level}">${detA.emoji} ${detA.state}</span>
-    <div style="font-size:.78rem;color:#9ca3af;margin-top:6px">
-      ${detA.state==='SHEAR INVERSION' ? '短波深層熱流已反轉，長波背景未反應 — 海底暗流已動' :
-        detA.state==='DEEP ACCUMULATION' ? '全尺度熱庫正常累積中' :
-        detA.state==='FULL REGIME SHIFT' ? '全尺度相變 — 深層熱量全面翻湧' : ''}
-    </div>
+    <span class="badge badge-${detA.level}">${detA.emoji}</span>
+    <div class="explain">${detAExplain[detA.state] || ''}</div>
   </div>
 </div>
 
-<!-- All 4 Detectors -->
+<!-- 四大指標一覽 -->
 <div class="card">
-  <div class="card-title">📊 四探測器全景</div>
+  <div class="card-title">📊 四大預警指標</div>
   <div class="detector-row">
-    <span class="name">A · Multi-Scale Δ²H</span>
-    <span class="val">${detA.d2h>0?'+':''}${detA.d2h.toFixed(3)}</span>
+    <span class="name">🌡️ 海洋熱量趨勢</span>
+    <span class="val">指數 ${detA.d2h>0?'+':''}${detA.d2h.toFixed(3)}</span>
     <span class="badge badge-${detA.level}">${detA.emoji}</span>
   </div>
   <div class="detector-row">
-    <span class="name">B · χ_eff 剛性</span>
-    <span class="val">${detB.value.toFixed(1)}</span>
+    <span class="name">🏗️ 氣候系統穩定度</span>
+    <span class="val">數值 ${detB.value.toFixed(1)}（愈低愈穩定）</span>
     <span class="badge badge-${detB.level}">✅</span>
   </div>
   <div class="detector-row">
-    <span class="name">C · Gaussianity 疊加</span>
-    <span class="val">QQ r=${detC.qq_r.toFixed(4)} (${detC.percentile}%ile)</span>
+    <span class="name">🌊 洋流協調性</span>
+    <span class="val">${detC.qq_r.toFixed(2)}（愈接近 1.0 愈正常）</span>
     <span class="badge badge-${detC.level}">${detC.level==='green'?'🟢':detC.level==='yellow'?'🟡':'🔴'}</span>
   </div>
   <div class="detector-row">
-    <span class="name">D · θ₁ 幾何骨架</span>
-    <span class="val">${detD.value.toFixed(1)}° (avg ${detD.mean.toFixed(1)}°)</span>
+    <span class="name">🧭 洋流結構穩定度</span>
+    <span class="val">${detD.value.toFixed(1)}°（愈細愈穩定）</span>
     <span class="badge badge-${detD.level}">${detD.level==='green'?'🟢':detD.level==='yellow'?'🟡':'🔴'}</span>
+  </div>
+  <div class="explain" style="margin-top:10px">
+    <b>點睇？</b><br>
+    🟢 四項全綠 → 放心，冇聖嬰信號<br>
+    🟡 有一兩項變黃 → 留意，可能醞釀中<br>
+    🔴 有紅 → 聖嬰信號強烈，早做準備
   </div>
 </div>
 
-<!-- History -->
+<!-- 歷史參考 -->
 <div class="card">
-  <div class="card-title">📈 歷史基準</div>
+  <div class="card-title">📈 長期參考數值</div>
   <div class="metrics">
-    <div class="metric"><div class="val">${d.history.H_mean.toFixed(3)}</div><div class="lbl">Helicity (H)</div></div>
-    <div class="metric"><div class="val">${d.history.theta1_latest.toFixed(1)}°</div><div class="lbl">Bridge θ₁</div></div>
-    <div class="metric"><div class="val">${d.history.chi_eff.toFixed(1)}</div><div class="lbl">χ_eff 剛性</div></div>
-    <div class="metric"><div class="val">${detC.qq_r.toFixed(4)}</div><div class="lbl">QQ r 高斯性</div></div>
+    <div class="metric"><div class="val">${d.history.H_mean.toFixed(2)}</div><div class="lbl">海洋熱含量（歷年平均）</div></div>
+    <div class="metric"><div class="val">${d.history.theta1_latest.toFixed(1)}°</div><div class="lbl">洋流結構角（愈細愈穩定）</div></div>
+    <div class="metric"><div class="val">${d.history.chi_eff.toFixed(1)}</div><div class="lbl">系統穩定度（愈低愈好）</div></div>
+    <div class="metric"><div class="val">${detC.qq_r.toFixed(2)}</div><div class="lbl">洋流協調性（1.0 = 最正常）</div></div>
   </div>
 </div>
 `;
