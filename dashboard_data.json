@@ -1,5 +1,5 @@
 {
-  "generated": "2026-07-27 14:42 UTC",
+  "generated": "2026-07-27 14:43 UTC",
   "source": "NOAA CPC ONI",
   "latest": {
     "date": "2026-05",
@@ -54,7 +54,7 @@
     }
   },
   "detector_b_chi_eff": {
-    "value": 4.6,
+    "value": 4.4,
     "level": "green"
   },
   "detector_c_gaussianity": {
@@ -74,7 +74,7 @@
     "H_mean": 1.52,
     "theta1_latest": 6.0,
     "theta1_mean": 9.8,
-    "chi_eff": 4.6
+    "chi_eff": 4.4
   },
   "vortex": {
     "h_core": 1.13,
