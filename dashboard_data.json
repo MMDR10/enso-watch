@@ -1,91 +1,91 @@
 {
-  "generated": "2026-07-27 14:43 UTC",
+  "generated": "2026-08-09 08:10 UTC",
   "source": "NOAA CPC ONI",
   "latest": {
-    "date": "2026-05",
-    "oni": 0.98,
+    "date": "2026-06",
+    "oni": 1.39,
     "oni_phase": "El Niño",
     "oni_emoji": "🔴"
   },
   "detector_a_multiscale": {
-    "state": "SHEAR INVERSION",
-    "emoji": "🟡",
-    "level": "yellow",
-    "dh_short": -0.4506,
-    "dh_long": 0.444,
-    "d2h": -0.8946,
-    "w0_months": 28.6,
+    "state": "DEEP ACCUMULATION",
+    "emoji": "🟢",
+    "level": "green",
+    "dh_short": 0.278,
+    "dh_long": 0.4023,
+    "d2h": -0.1243,
+    "w0_months": 28.0,
     "window_sweep": {
       "12": {
-        "dh_latest": -0.4506,
-        "dh_mean": 0.0493,
-        "inv_rate": 0.497
+        "dh_latest": 0.278,
+        "dh_mean": -0.0429,
+        "inv_rate": 0.566
       },
       "18": {
-        "dh_latest": -0.0993,
-        "dh_mean": 0.2301,
-        "inv_rate": 0.25
+        "dh_latest": -0.3202,
+        "dh_mean": 0.0931,
+        "inv_rate": 0.377
       },
       "24": {
-        "dh_latest": -0.5907,
-        "dh_mean": 0.4653,
-        "inv_rate": 0.121
+        "dh_latest": -0.5966,
+        "dh_mean": 0.3302,
+        "inv_rate": 0.185
       },
       "30": {
-        "dh_latest": 0.1765,
-        "dh_mean": 0.4837,
-        "inv_rate": 0.081
+        "dh_latest": 0.2913,
+        "dh_mean": 0.3228,
+        "inv_rate": 0.152
       },
       "36": {
-        "dh_latest": 0.4146,
-        "dh_mean": 0.4848,
-        "inv_rate": 0.058
+        "dh_latest": 0.0457,
+        "dh_mean": 0.3031,
+        "inv_rate": 0.17
       },
       "48": {
-        "dh_latest": 0.3633,
-        "dh_mean": 0.4925,
-        "inv_rate": 0.048
+        "dh_latest": 0.2729,
+        "dh_mean": 0.2836,
+        "inv_rate": 0.155
       },
       "60": {
-        "dh_latest": 0.444,
-        "dh_mean": 0.4866,
-        "inv_rate": 0.035
+        "dh_latest": 0.4023,
+        "dh_mean": 0.2623,
+        "inv_rate": 0.143
       }
     }
   },
   "detector_b_chi_eff": {
-    "value": 4.4,
+    "value": 4.3,
     "level": "green"
   },
   "detector_c_gaussianity": {
-    "qq_r": 0.9818,
-    "percentile": 86.6,
+    "qq_r": 0.9876,
+    "percentile": 94.3,
     "level": "green",
     "description": "Multi-source superposition integrity"
   },
   "detector_d_theta1": {
-    "value": 6.0,
-    "mean": 9.8,
+    "value": 5.9,
+    "mean": 10.1,
     "level": "green",
     "description": "Geometric skeleton normal"
   },
-  "composite": "🟡 WATCH",
+  "composite": "🟢 CLEAR",
   "history": {
-    "H_mean": 1.52,
-    "theta1_latest": 6.0,
-    "theta1_mean": 9.8,
-    "chi_eff": 4.4
+    "H_mean": 1.554,
+    "theta1_latest": 5.9,
+    "theta1_mean": 10.1,
+    "chi_eff": 4.3
   },
   "vortex": {
-    "h_core": 1.13,
-    "h_shell": 1.55,
-    "delta_h": 0.41,
+    "h_core": 1.2,
+    "h_shell": 1.25,
+    "delta_h": 0.05,
     "inverted": false,
     "label": "渦流正常",
     "comparison_1996": {
-      "h_core": 1.66,
+      "h_core": 1.67,
       "h_shell": 1.35,
-      "delta_h": -0.32,
+      "delta_h": -0.33,
       "label": "1996.5 → 1997 Super El Niño",
       "result": "提前 6 個月預警超級聖嬰"
     }
