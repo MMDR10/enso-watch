@@ -9,6 +9,8 @@ on:
   push:
     paths:
       - 'enso_auto_update.py'
+      - 'enso_saddle_monitor.py'
+      - 'enso_curl_monitor.py'
 
 jobs:
   update:
@@ -26,16 +28,27 @@ jobs:
           python-version: '3.11'
       
       - name: Install dependencies
-        run: pip install numpy scipy
+        run: pip install numpy scipy netCDF4 xarray cdsapi
       
-      - name: Run ENSO auto-update
+      - name: Run ENSO auto-update (ONI 1D)
         run: python enso_auto_update.py
+      
+      - name: Run Saddle Monitor (OISST anomaly, 免 key)
+        run: python enso_saddle_monitor.py
+        continue-on-error: true   # OPeNDAP 偶爾唔穩，唔好成個 workflow 死
+      
+      - name: Run Curl Monitor (ERA5 wind stress curl, 需 CDS key)
+        run: python enso_curl_monitor.py
+        continue-on-error: true   # CDS 下載慢/排隊，失敗唔好成個 workflow 死
+        env:
+          CDS_URL: ${{ secrets.CDS_URL }}
+          CDS_KEY: ${{ secrets.CDS_KEY }}
       
       - name: Commit & push if changed
         run: |
           git config user.name "ENSO Watch Bot"
           git config user.email "enso-watch@github.com"
-          git add dashboard_data.json
+          git add dashboard_data.json saddle_data.json saddle_history.json curl_data.json curl_history.json
           if git diff --cached --quiet; then
             echo "No changes. ENSO status unchanged."
           else

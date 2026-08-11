@@ -1,0 +1,13 @@
+{
+  "records": [
+    {
+      "month": "2026-07",
+      "saddle_frac": 0.56777,
+      "spearman_density_rho": 0.1606,
+      "spearman_density_grad": 0.178,
+      "east_end_density": 0.52223,
+      "nino34_density": 0.47268,
+      "field": "sst_anomaly"
+    }
+  ]
+}
