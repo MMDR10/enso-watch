@@ -48,7 +48,10 @@ jobs:
         run: |
           git config user.name "ENSO Watch Bot"
           git config user.email "enso-watch@github.com"
-          git add dashboard_data.json saddle_data.json saddle_history.json curl_data.json curl_history.json
+          # 只 add 實際存在嘅監測輸出（curl_data.json 喺未設 CDS key 時唔會產生）
+          git add dashboard_data.json saddle_data.json saddle_history.json
+          if [ -f curl_data.json ]; then git add curl_data.json; fi
+          if [ -f curl_history.json ]; then git add curl_history.json; fi
           if git diff --cached --quiet; then
             echo "No changes. ENSO status unchanged."
           else
