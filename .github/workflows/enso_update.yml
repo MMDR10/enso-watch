@@ -57,6 +57,8 @@ jobs:
             echo "No changes. ENSO status unchanged."
           else
             git commit -m "🔄 ENSO auto-update $(date +%Y-%m-%d)"
+            # 兩個 run 可能同時跑 → pull --rebase 再 push（race condition 保護）
+            git pull --rebase origin master || true
             git push
             echo "✅ Updated and pushed."
           fi
