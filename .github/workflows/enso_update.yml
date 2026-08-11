@@ -11,6 +11,7 @@ on:
       - 'enso_auto_update.py'
       - 'enso_saddle_monitor.py'
       - 'enso_curl_monitor.py'
+      - '.github/workflows/enso_update.yml'
 
 jobs:
   update:
