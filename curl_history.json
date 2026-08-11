@@ -1,0 +1,12 @@
+{
+  "records": [
+    {
+      "month": "2026-07",
+      "saddle_frac": 0.57932,
+      "spearman_density_curl": 0.2538,
+      "east_end_density": 0.4707,
+      "nino34_density": 0.49727,
+      "field": "curl_tau"
+    }
+  ]
+}
