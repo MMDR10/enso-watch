@@ -112,14 +112,19 @@ function render(d) {
   const vx = d.vortex;
   const cmp = vx && vx.comparison_1996;
   
-  // composite plain text
+  // composite plain text — 自家檢測器判讀（唔係 ENSO 相位！）
   const compositeText = {
-    'CLEAR': '一切正常 — 四項指標均無異常',
-    'WATCH': '持續觀察 — 有指標出現輕微變化，建議留意',
-    'WARNING': '高度警戒 — 多項指標異常，聖嬰可能正在形成',
-    'CRITICAL': '極度危險 — 強聖嬰信號明確，請做好防災準備'
+    'CLEAR': '四項檢測器均無統計異常信號',
+    'WATCH': '有檢測器出現輕微變化，建議留意',
+    'WARNING': '多項檢測器異常，ONI 數列結構出現變化',
+    'CRITICAL': '多項檢測器強烈異常，數列結構劇變'
   };
   const compKey = d.composite.includes('CLEAR') ? 'CLEAR' : d.composite.includes('CRITICAL') ? 'CRITICAL' : d.composite.includes('WARNING') ? 'WARNING' : 'WATCH';
+  // 官方 ENSO 相位 + 強度（data 由 enso_auto_update.py 每期寫入）
+  const oni = d.latest.oni;
+  const ensoColor = oni >= 0.5 ? '#f87171' : (oni <= -0.5 ? '#60a5fa' : '#9ca3af');
+  const ensoBorder = oni >= 0.5 ? '#7f1d1d' : (oni <= -0.5 ? '#1e3a8a' : '#374151');
+  const oniCategory = d.latest.oni_category_zh || phaseEmoji[d.latest.oni_phase];
   
   const detAExplain = {
     'SHEAR INVERSION': '海底暖水正在上升，海面尚無反應。<br>這通常是聖嬰來臨前的早期信號，類似「海底暗流已經動了，海面仲未起浪」。<br>歷史平均提前約 <b>4.4 年</b>預警。',
@@ -139,6 +144,21 @@ function render(d) {
   <div class="sub">一眼睇明 · 唔需要科學背景 · ${d.generated}</div>
 </div>
 
+<!-- 🚨 目前 ENSO 狀態（官方判定）— 最重要，放最頂 -->
+<div class="card" style="border:2px solid ${ensoBorder}">
+  <div class="card-title">🚨 目前 ENSO 狀態（NOAA 官方判定）</div>
+  <div style="text-align:center;padding:10px 0">
+    <div style="font-size:2.3rem;font-weight:800;color:${ensoColor}">${phaseEmoji[d.latest.oni_phase]} ${oniCategory}</div>
+    <div style="font-size:1rem;color:#d1d5db;margin-top:6px">
+      ONI = ${oni>0?'+':''}${oni.toFixed(2)}°C（${d.latest.date} 三個月平均）
+      &nbsp;<span class="badge ${oni>=0.5?'badge-red':oni<=-0.5?'badge-orange':'badge-grey'}">${d.latest.oni_trend_zh || ''}</span>
+    </div>
+  </div>
+  <div class="explain" style="border-left:4px solid ${ensoColor};background:${oni>=0.5?'#1f0f0f':oni<=-0.5?'#0f1f3a':'#0f172a'}">
+    ${d.latest.oni_note || phaseExplain[d.latest.oni_phase]}
+  </div>
+</div>
+
 <!-- 咩係聖嬰 -->
 <div class="card">
   <div class="card-title">📖 咩係聖嬰？</div>
@@ -155,15 +175,19 @@ function render(d) {
   <div class="oni-big" style="color:${d.latest.oni>=0.5?'#ef4444':d.latest.oni<=-0.5?'#3b82f6':'#9ca3af'}">
     ${d.latest.oni>=0?'偏高 ':''}${d.latest.oni<=-0.5?'偏低 ':''}${Math.abs(d.latest.oni).toFixed(1)}°C
   </div>
-  <div class="oni-label">${d.latest.date} · ${phaseEmoji[d.latest.oni_phase]}</div>
+  <div class="oni-label">${d.latest.date} · ${phaseEmoji[d.latest.oni_phase]} ${d.latest.oni_strength_zh || ''}</div>
   <div class="explain">${phaseExplain[d.latest.oni_phase]}</div>
 </div>
 
-<!-- 總體判定 -->
+<!-- 總體判定：自家檢測器（唔係 ENSO 相位！） -->
 <div class="card warning-box" style="border-color:${d.composite.includes('CLEAR')?'#14532d':d.composite.includes('CRITICAL')?'#7f1d1d':'#713f12'}">
+  <div class="card-title" style="text-align:center">🔬 自家檢測器總體判定（⚠️ 非 ENSO 相位）</div>
   <div class="warning-light">${d.composite.includes('CLEAR')?'🟢':d.composite.includes('CRITICAL')?'🔴':'🟡'}</div>
-  <div class="warning-level" style="color:${d.composite.includes('CLEAR')?'#86efac':d.composite.includes('CRITICAL')?'#fca5a5':'#fde047'}">${d.composite.includes('CLEAR')?'一切正常':d.composite.includes('CRITICAL')?'極度危險':d.composite.includes('WARNING')?'高度警戒':'持續觀察'}</div>
+  <div class="warning-level" style="color:${d.composite.includes('CLEAR')?'#86efac':d.composite.includes('CRITICAL')?'#fca5a5':'#fde047'}">${d.composite_meaning || compositeText[compKey]}</div>
   <div class="warning-detail">${compositeText[compKey]}</div>
+  <div class="explain" style="margin-top:10px;border-left:4px solid #f59e0b;background:#1a1505">
+    ${d.composite_note || '呢個係我哋自家檢測器對 ONI 數列嘅統計判讀，唔等於 ENSO 相位。ENSO 相位永遠以頂部「目前 ENSO 狀態」為準。'}
+  </div>
 </div>
 
 <!-- 最重要的指標：海洋熱量變化 -->
@@ -274,9 +298,11 @@ ${cmp ? `
   </div>
   <div class="explain" style="margin-top:10px">
     <b>點睇？</b><br>
-    🟢 四項全綠 → 放心，冇聖嬰信號<br>
-    🟡 有一兩項變黃 → 留意，可能醞釀中<br>
-    🔴 有紅 → 聖嬰信號強烈，早做準備
+    呢四個係我哋<b>自家檢測器</b>對 ONI 數列嘅統計判讀 — <b>唔係 ENSO 相位判斷</b>。<br>
+    🟢 全綠 → 檢測器無統計異常（但 ENSO 本身可以仍然係聖嬰／反聖嬰，以頂部為準）<br>
+    🟡 有變黃 → ONI 數列結構有變化，留意<br>
+    🔴 有紅 → 數列結構異常強烈（例如 1997 超級聖嬰前夕嘅模式）<br>
+    <b>ENSO 而家係咩相位，永遠睇頂部「目前 ENSO 狀態」框。</b>
   </div>
 </div>
 

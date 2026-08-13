@@ -1,11 +1,17 @@
 {
-  "generated": "2026-08-13 03:28 UTC",
+  "generated": "2026-08-13 06:07 UTC",
   "source": "NOAA CPC ONI",
   "latest": {
     "date": "2026-06",
     "oni": 1.39,
     "oni_phase": "El Niño",
-    "oni_emoji": "🔴"
+    "oni_strength": "moderate",
+    "oni_strength_zh": "中等偏強",
+    "oni_category_zh": "聖嬰（中等偏強）",
+    "oni_emoji": "🔴",
+    "oni_trend": "rising",
+    "oni_trend_zh": "📈 增強中",
+    "oni_note": "赤道太平洋異常偏暖 — 唔係正常水平。全球天氣（暴雨/乾旱/颱風路徑）受影響。"
   },
   "detector_a_multiscale": {
     "state": "DEEP ACCUMULATION",
@@ -54,7 +60,7 @@
     }
   },
   "detector_b_chi_eff": {
-    "value": 3.5,
+    "value": 3.8,
     "level": "green"
   },
   "detector_c_gaussianity": {
@@ -70,11 +76,13 @@
     "description": "Geometric skeleton normal"
   },
   "composite": "🟢 CLEAR",
+  "composite_meaning": "自家檢測器：無異常信號",
+  "composite_note": "⚠️ 呢個係我哋自家檢測器對 ONI 數列嘅統計判讀，唔等於 ENSO 相位判斷 — ENSO 而家係咩狀態，永遠以頂部「目前 ENSO 狀態」框為準。",
   "history": {
     "H_mean": 1.554,
     "theta1_latest": 5.9,
     "theta1_mean": 10.1,
-    "chi_eff": 3.5
+    "chi_eff": 3.8
   },
   "vortex": {
     "h_core": 1.2,

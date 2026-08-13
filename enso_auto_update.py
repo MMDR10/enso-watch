@@ -256,16 +256,52 @@ def main():
     elif theta_latest < 0.5 * theta_mean: d_level = "yellow"
     else: d_level = "green"
     
-    # Composite
+    # Composite — this is OUR OWN detector reading of the ONI 1D series,
+    # NOT an ENSO phase judgement. Wording kept explicit to avoid confusion.
     alerts = sum(1 for l in [a_level, c_level, d_level] if l in ("red", "orange", "yellow"))
     if alerts >= 2: composite = "🔴 CRITICAL"
     elif alerts == 1: composite = "🟡 WATCH"
     else: composite = "🟢 CLEAR"
+    composite_meaning = {
+        "🔴 CRITICAL": "自家檢測器：極度警戒（多項指標異常）",
+        "🟡 WATCH": "自家檢測器：留意（有指標出現變化）",
+        "🟢 CLEAR": "自家檢測器：無異常信號",
+    }[composite]
+    composite_note = ("⚠️ 呢個係我哋自家檢測器對 ONI 數列嘅統計判讀，唔等於 ENSO 相位判斷 "
+                      "— ENSO 而家係咩狀態，永遠以頂部「目前 ENSO 狀態」框為準。")
     
-    # ONI phase
-    if latest_oni >= 0.5: oni_phase = "El Niño"
-    elif latest_oni <= -0.5: oni_phase = "La Niña"
-    else: oni_phase = "Neutral"
+    # ONI phase + strength classification (NOAA official thresholds)
+    def classify_oni(v):
+        """Return (phase, strength_key, strength_zh, note) for an ONI value."""
+        if v >= 0.5:
+            phase = "El Niño"
+            if v >= 2.0:   s = ("super", "超級聖嬰", "強度已達歷史最強級別（自 1950 年只出現過 3 次）")
+            elif v >= 1.5: s = ("strong", "強聖嬰", "強度達「強」級，衝擊力顯著")
+            elif v >= 1.0: s = ("moderate", "中等偏強", "強度屬「中等」，接近「強」級")
+            else:          s = ("weak", "弱聖嬰", "強度屬「弱」級")
+            note = "赤道太平洋異常偏暖 — 唔係正常水平。全球天氣（暴雨/乾旱/颱風路徑）受影響。"
+        elif v <= -0.5:
+            phase = "La Niña"
+            if v <= -2.0:   s = ("super", "超級反聖嬰", "強度達歷史最強級別")
+            elif v <= -1.5: s = ("strong", "強反聖嬰", "強度達「強」級")
+            elif v <= -1.0: s = ("moderate", "中等偏強", "強度屬「中等」")
+            else:           s = ("weak", "弱反聖嬰", "強度屬「弱」級")
+            note = "赤道太平洋異常偏冷 — 唔係正常水平。全球天氣受影響。"
+        else:
+            phase = "Neutral"
+            s = ("neutral", "正常水平", "海水溫度喺正常範圍")
+            note = "海水溫度喺正常範圍內，冇異常信號。"
+        return phase, s[0], s[1], note
+    
+    oni_phase, oni_strength, oni_strength_zh, oni_note = classify_oni(latest_oni)
+    
+    # Trend: compare latest 3-month ONI vs previous 3-month (same month 3 months ago)
+    if len(oni) >= 4:
+        prev = oni[-4]
+        trend_key = "rising" if latest_oni > prev + 0.05 else ("falling" if latest_oni < prev - 0.05 else "steady")
+    else:
+        trend_key = "steady"
+    trend_zh = {"rising": "📈 增強中", "falling": "📉 減弱中", "steady": "➡️ 持平"}[trend_key]
     
     # 5. Output
     print("\n[5/5] Writing dashboard_data.json...")
@@ -277,7 +313,13 @@ def main():
             "date": latest_date,
             "oni": round(latest_oni, 2),
             "oni_phase": oni_phase,
+            "oni_strength": oni_strength,
+            "oni_strength_zh": oni_strength_zh,
+            "oni_category_zh": "聖嬰（" + oni_strength_zh + "）" if oni_phase=="El Niño" else ("反聖嬰（" + oni_strength_zh + "）" if oni_phase=="La Niña" else "正常水平"),
             "oni_emoji": "🔴" if latest_oni>=0.5 else ("🔵" if latest_oni<=-0.5 else "⚪"),
+            "oni_trend": trend_key,
+            "oni_trend_zh": trend_zh,
+            "oni_note": oni_note,
         },
         "detector_a_multiscale": {
             "state": state,
@@ -308,6 +350,8 @@ def main():
                           else "Skeleton tightening — possible precursor",
         },
         "composite": composite,
+        "composite_meaning": composite_meaning,
+        "composite_note": composite_note,
         "history": {
             "H_mean": H_mean,
             "theta1_latest": theta_latest,
