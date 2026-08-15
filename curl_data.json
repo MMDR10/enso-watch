@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-13 06:09 UTC",
+  "generated": "2026-08-15 07:44 UTC",
   "source": "ERA5 reanalysis single-levels via CDS API",
   "field": "wind stress curl τ (bulk formula, standardized)",
   "month": "2026-07",
