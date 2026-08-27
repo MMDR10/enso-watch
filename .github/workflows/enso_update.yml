@@ -11,6 +11,7 @@ on:
       - 'enso_auto_update.py'
       - 'enso_saddle_monitor.py'
       - 'enso_curl_monitor.py'
+      - 'enso_africa_capacitor.py'
       - '.github/workflows/enso_update.yml'
 
 jobs:
@@ -45,6 +46,13 @@ jobs:
           CDS_URL: ${{ secrets.CDS_URL }}
           CDS_KEY: ${{ secrets.CDS_KEY }}
       
+      - name: Run Africa Capacitor Monitor (ERA5 850hPa, 需 CDS key)
+        run: python enso_africa_capacitor.py
+        continue-on-error: true
+        env:
+          CDS_URL: ${{ secrets.CDS_URL }}
+          CDS_KEY: ${{ secrets.CDS_KEY }}
+      
       - name: Commit & push if changed
         run: |
           git config user.name "ENSO Watch Bot"
@@ -53,6 +61,8 @@ jobs:
           git add dashboard_data.json saddle_data.json saddle_history.json
           if [ -f curl_data.json ]; then git add curl_data.json; fi
           if [ -f curl_history.json ]; then git add curl_history.json; fi
+          if [ -f africa_capacitor_data.json ]; then git add africa_capacitor_data.json; fi
+          if [ -f africa_capacitor_history.json ]; then git add africa_capacitor_history.json; fi
           if git diff --cached --quiet; then
             echo "No changes. ENSO status unchanged."
           else
