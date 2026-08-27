@@ -1,0 +1,40 @@
+[
+  {
+    "timestamp": "2026-08-27T06:21:36.403807+00:00",
+    "charge_year": 2026,
+    "target_winter": "2026-2027",
+    "charging_months": 3,
+    "features": {
+      "z850_mean": 14953.760742,
+      "rho_850": 0.014899,
+      "z700_mean": 31248.298177,
+      "rho_700": 0.008479
+    },
+    "prediction": {
+      "M1": {
+        "raw": 2.046,
+        "class": "El_Nino"
+      },
+      "M4": {
+        "raw": 8.032,
+        "class": "El_Nino"
+      }
+    },
+    "models_agree": true,
+    "historical_accuracy": {
+      "M1": {
+        "direction": 0.718,
+        "el_nino": 0.833,
+        "la_nina": 0.769,
+        "neutral": 0.571
+      },
+      "M4": {
+        "direction": 0.769,
+        "el_nino": 0.667,
+        "la_nina": 0.846,
+        "neutral": 0.786
+      }
+    },
+    "status": "ok"
+  }
+]
