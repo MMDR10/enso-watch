@@ -1,0 +1,60 @@
+{
+  "meta": {
+    "pipeline": "Africa Capacitor Model — Operational Forecast",
+    "prediction_year": 2026,
+    "target": "Winter 2026-2027 ENSO state",
+    "data_source": "ERA5 850hPa/700hPa geopotential",
+    "charging_window": "May-Jul",
+    "training_period": "1982-2020"
+  },
+  "features": {
+    "z850_mean": 14953.7607421875,
+    "rho_700_std": 0.001131528977824731,
+    "charging_months": 3
+  },
+  "models": {
+    "M1": {
+      "description": "850hPa Africa geopotential mean",
+      "coefficients": {
+        "slope": 0.01113299750692047,
+        "intercept": -164.43408655113547
+      },
+      "training_r": 0.41526237456529885,
+      "training_p": 0.008567888282857662
+    },
+    "M4": {
+      "description": "850hPa mean + 700hPa ρ_std",
+      "coefficients": [
+        0.008897148918332444,
+        835.9619641134229,
+        -132.09991860180912
+      ],
+      "n_train": 39
+    }
+  },
+  "prediction": {
+    "M1": {
+      "raw": 2.046094510723151,
+      "class": "El_Nino"
+    },
+    "M4": {
+      "raw": 1.891832797300168,
+      "class": "El_Nino"
+    }
+  },
+  "confidence": "high",
+  "historical_accuracy": {
+    "M1": {
+      "direction": 0.718,
+      "el_nino": 0.833,
+      "la_nina": 0.769,
+      "neutral": 0.571
+    },
+    "M4": {
+      "direction": 0.769,
+      "el_nino": 0.667,
+      "la_nina": 0.846,
+      "neutral": 0.786
+    }
+  }
+}

@@ -50,6 +50,19 @@ python enso_africa_capacitor.py      # Africa 電容預測（需 CDS key）
 ├── enso_saddle_monitor.py        ← OISST anomaly 鞍點結構
 ├── enso_curl_monitor.py          ← ERA5 curl τ 交界面鞍點
 ├── enso_africa_capacitor.py      ← Africa 電容 6 月預測（NEW）
+├── scripts/                      ← 分析腳本（研究用）
+│   ├── africa_capacitor_deep3.py       ← Deep-3 全層分析
+│   ├── africa_capacitor_nonlinear_predictor.py ← 非線性 M4 模型
+│   ├── mjo_daily_enso_onset_v2.py      ← MJO 日尺度分析（OOMI）
+│   └── nonlinear_overfit_diagnosis.py  ← 過擬合診斷
+├── data/                         ← 結果數據 + 原始數據
+│   ├── africa_capacitor_deep3.json     ← Deep-3 分析結果
+│   ├── africa_combined_predictor.json  ← M4 非線性模型結果
+│   ├── mjo_daily_enso_onset_v2.json    ← MJO 分析結果
+│   ├── enso_operational_forecast_2026.json ← 2026 預測
+│   ├── oomi_daily.txt                  ← OOMI 原始數據（NOAA PSL）
+│   └── rmm_star_data.txt               ← RMM* 原始數據（NOAA PSL）
+├── DATA_SOURCES.md               ← 數據來源完整說明
 ├── enso_dashboard.html           ← 靜態儀表板
 ├── dashboard_data.json           ← ONI + 探測器數據
 ├── saddle_data.json / history    ← 鞍點結構數據

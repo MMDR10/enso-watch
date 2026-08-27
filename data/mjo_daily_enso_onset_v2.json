@@ -1,0 +1,43 @@
+{
+  "meta": {
+    "task": "MJO daily-scale activity vs ENSO onset V2",
+    "data": "OOMI (PSL, OLR-based, full year, 1979-2022)",
+    "method": "Daily MJO amplitude: pre-onset [-6,-1] vs neutral, season-matched",
+    "improvement": "Full year coverage + phase info + OLR-based (vs RMM* Nov-Apr only)"
+  },
+  "sample_sizes": {
+    "el_pre_onset_days": 1947,
+    "la_pre_onset_days": 1457,
+    "neutral_days": 5270,
+    "el_events": 11,
+    "la_events": 8
+  },
+  "test1_mean_amplitude": {
+    "el_mean": 1.3772394709809963,
+    "la_mean": 1.2203779066575156,
+    "neutral_mean": 1.2208325009487666,
+    "el_vs_neutral_p": 6.383070159122898e-20,
+    "la_vs_neutral_p": 0.97968808406558
+  },
+  "test2_strong_fraction": {
+    "el_frac": 0.7046738572162301,
+    "la_frac": 0.5991763898421414,
+    "neu_frac": 0.5721062618595826,
+    "el_vs_neutral_p": 1.7681410109942545e-24,
+    "la_vs_neutral_p": 0.06848255603900481
+  },
+  "test3_phase_distribution": {
+    "el_chi2": 6.085808390937197,
+    "el_p": 0.5297664960591124,
+    "la_chi2": 3.7748303815628033,
+    "la_p": 0.8053165590818228
+  },
+  "test4_active_events": {
+    "el_mean": 2.3636363636363638,
+    "la_mean": 2.375
+  },
+  "test5_event_level": {
+    "el_vs_neutral_p": 0.20750375380370642,
+    "la_vs_neutral_p": 0.9981093117623038
+  }
+}

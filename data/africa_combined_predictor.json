@@ -1,0 +1,83 @@
+{
+  "model_1_africa_6month": {
+    "MAE": 29.85,
+    "RMSE": 38.48,
+    "direction_accuracy": 0.718,
+    "direction_count": "28/39",
+    "event_skill": 0.76,
+    "phase_results": {
+      "El_Nino": {
+        "direction": "10/12",
+        "accuracy": 0.833,
+        "MAE": 26.52
+      },
+      "La_Nina": {
+        "direction": "10/13",
+        "accuracy": 0.769,
+        "MAE": 41.67
+      },
+      "Neutral": {
+        "direction": "8/14",
+        "accuracy": 0.571,
+        "MAE": 21.72
+      }
+    }
+  },
+  "model_2_africa_3month": {
+    "MAE": 33.76,
+    "RMSE": 44.04,
+    "direction_accuracy": 0.615,
+    "direction_count": "24/39",
+    "event_skill": 0.64,
+    "phase_results": {
+      "El_Nino": {
+        "direction": "7/12",
+        "accuracy": 0.583,
+        "MAE": 35.85
+      },
+      "La_Nina": {
+        "direction": "9/13",
+        "accuracy": 0.692,
+        "MAE": 42.34
+      },
+      "Neutral": {
+        "direction": "8/14",
+        "accuracy": 0.571,
+        "MAE": 24.01
+      }
+    }
+  },
+  "best_combined": {
+    "w_6month": 1.0,
+    "MAE": 29.85,
+    "RMSE": 38.48,
+    "direction_accuracy": 0.718,
+    "direction_count": "28/39",
+    "event_skill": 0.76,
+    "phase_results": {
+      "El_Nino": {
+        "direction": "10/12",
+        "accuracy": 0.833,
+        "MAE": 26.52
+      },
+      "La_Nina": {
+        "direction": "10/13",
+        "accuracy": 0.769,
+        "MAE": 41.67
+      },
+      "Neutral": {
+        "direction": "8/14",
+        "accuracy": 0.571,
+        "MAE": 21.72
+      }
+    }
+  },
+  "la_nina\u4e13\u7528": {
+    "n": 13,
+    "MAE": 41.67,
+    "direction": "10/13",
+    "accuracy": 0.769,
+    "r": 0.168,
+    "p": 0.5832
+  }
+}
