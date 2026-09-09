@@ -1,13 +1,13 @@
 {
-  "generated": "2026-08-27 06:18 UTC",
+  "generated": "2026-09-09 11:01 UTC",
   "source": "NOAA CPC ONI",
   "latest": {
-    "date": "2026-06",
-    "oni": 1.39,
+    "date": "2026-07",
+    "oni": 1.8,
     "oni_phase": "El Niño",
-    "oni_strength": "moderate",
-    "oni_strength_zh": "中等偏強",
-    "oni_category_zh": "聖嬰（中等偏強）",
+    "oni_strength": "strong",
+    "oni_strength_zh": "強聖嬰",
+    "oni_category_zh": "聖嬰（強聖嬰）",
     "oni_emoji": "🔴",
     "oni_trend": "rising",
     "oni_trend_zh": "📈 增強中",
@@ -17,60 +17,60 @@
     "state": "DEEP ACCUMULATION",
     "emoji": "🟢",
     "level": "green",
-    "dh_short": 0.278,
-    "dh_long": 0.4023,
-    "d2h": -0.1243,
-    "w0_months": 28.0,
+    "dh_short": 0.4435,
+    "dh_long": 0.5849,
+    "d2h": -0.1414,
+    "w0_months": null,
     "window_sweep": {
       "12": {
-        "dh_latest": 0.278,
-        "dh_mean": -0.0429,
-        "inv_rate": 0.566
+        "dh_latest": 0.4435,
+        "dh_mean": -0.0413,
+        "inv_rate": 0.564
       },
       "18": {
-        "dh_latest": -0.3202,
-        "dh_mean": 0.0931,
-        "inv_rate": 0.377
+        "dh_latest": 0.3062,
+        "dh_mean": 0.0938,
+        "inv_rate": 0.375
       },
       "24": {
-        "dh_latest": -0.5966,
-        "dh_mean": 0.3302,
-        "inv_rate": 0.185
+        "dh_latest": 0.1524,
+        "dh_mean": 0.3296,
+        "inv_rate": 0.184
       },
       "30": {
-        "dh_latest": 0.2913,
-        "dh_mean": 0.3228,
+        "dh_latest": 0.3616,
+        "dh_mean": 0.323,
         "inv_rate": 0.152
       },
       "36": {
-        "dh_latest": 0.0457,
-        "dh_mean": 0.3031,
-        "inv_rate": 0.17
+        "dh_latest": 0.5975,
+        "dh_mean": 0.3041,
+        "inv_rate": 0.169
       },
       "48": {
-        "dh_latest": 0.2729,
-        "dh_mean": 0.2836,
+        "dh_latest": 0.365,
+        "dh_mean": 0.2839,
         "inv_rate": 0.155
       },
       "60": {
-        "dh_latest": 0.4023,
-        "dh_mean": 0.2623,
+        "dh_latest": 0.5849,
+        "dh_mean": 0.2635,
         "inv_rate": 0.143
       }
     }
   },
   "detector_b_chi_eff": {
-    "value": 3.9,
+    "value": 3.5,
     "level": "green"
   },
   "detector_c_gaussianity": {
-    "qq_r": 0.9876,
-    "percentile": 94.3,
+    "qq_r": 0.9872,
+    "percentile": 93.3,
     "level": "green",
     "description": "Multi-source superposition integrity"
   },
   "detector_d_theta1": {
-    "value": 5.9,
+    "value": 14.9,
     "mean": 10.1,
     "level": "green",
     "description": "Geometric skeleton normal"
@@ -80,14 +80,14 @@
   "composite_note": "⚠️ 呢個係我哋自家檢測器對 ONI 數列嘅統計判讀，唔等於 ENSO 相位判斷 — ENSO 而家係咩狀態，永遠以頂部「目前 ENSO 狀態」框為準。",
   "history": {
     "H_mean": 1.554,
-    "theta1_latest": 5.9,
+    "theta1_latest": 14.9,
     "theta1_mean": 10.1,
-    "chi_eff": 3.9
+    "chi_eff": 3.5
   },
   "vortex": {
-    "h_core": 1.2,
-    "h_shell": 1.25,
-    "delta_h": 0.05,
+    "h_core": 1.19,
+    "h_shell": 1.79,
+    "delta_h": 0.6,
     "inverted": false,
     "label": "渦流正常",
     "comparison_1996": {

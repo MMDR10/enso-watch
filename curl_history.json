@@ -7,6 +7,14 @@
       "east_end_density": 0.4707,
       "nino34_density": 0.49727,
       "field": "curl_tau"
+    },
+    {
+      "month": "2026-08",
+      "saddle_frac": 0.58489,
+      "spearman_density_curl": 0.3414,
+      "east_end_density": 0.46306,
+      "nino34_density": 0.45281,
+      "field": "curl_tau"
     }
   ]
 }

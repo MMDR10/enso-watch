@@ -8,6 +8,15 @@
       "east_end_density": 0.53063,
       "nino34_density": 0.47071,
       "field": "sst_anomaly"
+    },
+    {
+      "month": "2026-08",
+      "saddle_frac": 0.56419,
+      "spearman_density_rho": 0.1159,
+      "spearman_density_grad": 0.1243,
+      "east_end_density": 0.52127,
+      "nino34_density": 0.45106,
+      "field": "sst_anomaly"
     }
   ]
 }

@@ -1,8 +1,8 @@
 {
-  "generated": "2026-08-27 06:18 UTC",
+  "generated": "2026-09-09 11:01 UTC",
   "source": "NOAA OISST v2.1 (0.25°) via OPeNDAP",
   "field": "SST anomaly (minus 1982-2025 monthly climatology)",
-  "month": "2026-07",
+  "month": "2026-08",
   "grid": {
     "nlat": 240,
     "nlon": 680,
@@ -16,18 +16,18 @@
     ]
   },
   "morse": {
-    "saddle_frac": 0.56875,
-    "peak_frac": 0.19744,
-    "trough_frac": 0.20226,
+    "saddle_frac": 0.56419,
+    "peak_frac": 0.20044,
+    "trough_frac": 0.20382,
     "n_valid": 132403
   },
   "correlations": {
-    "spearman_density_rho": 0.167,
-    "spearman_density_grad": 0.1833
+    "spearman_density_rho": 0.1159,
+    "spearman_density_grad": 0.1243
   },
   "regional_density": {
-    "east_end": 0.53063,
-    "nino34": 0.47071
+    "east_end": 0.52127,
+    "nino34": 0.45106
   },
   "baselines": {
     "saddle_frac_enso_field": 0.564,
