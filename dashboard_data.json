@@ -1,13 +1,13 @@
 {
-  "generated": "2026-09-22 11:16 UTC",
+  "generated": "2026-10-09 12:53 UTC",
   "source": "NOAA CPC ONI",
   "latest": {
-    "date": "2026-07",
-    "oni": 1.8,
+    "date": "2026-08",
+    "oni": 2.16,
     "oni_phase": "El Niño",
-    "oni_strength": "strong",
-    "oni_strength_zh": "強聖嬰",
-    "oni_category_zh": "聖嬰（強聖嬰）",
+    "oni_strength": "super",
+    "oni_strength_zh": "超級聖嬰",
+    "oni_category_zh": "聖嬰（超級聖嬰）",
     "oni_emoji": "🔴",
     "oni_trend": "rising",
     "oni_trend_zh": "📈 增強中",
@@ -60,7 +60,7 @@
     }
   },
   "detector_b_chi_eff": {
-    "value": 3.7,
+    "value": 3.5,
     "level": "green"
   },
   "detector_c_gaussianity": {
@@ -82,7 +82,7 @@
     "H_mean": 1.554,
     "theta1_latest": 14.9,
     "theta1_mean": 10.1,
-    "chi_eff": 3.7
+    "chi_eff": 3.5
   },
   "vortex": {
     "h_core": 1.19,
