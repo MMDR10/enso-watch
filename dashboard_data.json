@@ -1,9 +1,9 @@
 {
-  "generated": "2026-10-22 11:28 UTC",
+  "generated": "2026-11-08 12:48 UTC",
   "source": "NOAA CPC ONI",
   "latest": {
-    "date": "2026-08",
-    "oni": 2.16,
+    "date": "2026-09",
+    "oni": 2.46,
     "oni_phase": "El Niño",
     "oni_strength": "super",
     "oni_strength_zh": "超級聖嬰",
@@ -60,7 +60,7 @@
     }
   },
   "detector_b_chi_eff": {
-    "value": 3.5,
+    "value": 3.8,
     "level": "green"
   },
   "detector_c_gaussianity": {
@@ -82,7 +82,7 @@
     "H_mean": 1.554,
     "theta1_latest": 14.9,
     "theta1_mean": 10.1,
-    "chi_eff": 3.5
+    "chi_eff": 3.8
   },
   "vortex": {
     "h_core": 1.19,
