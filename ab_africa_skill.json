@@ -1,0 +1,209 @@
+{
+  "experiment": "skill A/B — Africa capacitor incremental test",
+  "prompted_by": "MKP 2026-11-09: 分單獨一項加埋非洲預測鏈看看有沒有分別",
+  "design": {
+    "forecast_time": "end of July, year Y (charging window [5,6,7])",
+    "target": "DJF ONI of winter Y→Y+1 = mean(Dec Y, Jan Y+1, Feb Y+1)",
+    "lead_time": "~5 months to DJF start",
+    "model": "OLS per-variant, LOO over winters",
+    "features_note": "Africa block = AS/RHO (africa_features_528.npz); ONI block from release/oni.csv",
+    "n_winters": 44,
+    "years": [
+      1982,
+      2025
+    ],
+    "class_counts": {
+      "Neutral": 13,
+      "El_Nino": 15,
+      "La_Nina": 16
+    }
+  },
+  "variants": {
+    "A_pers_ONI_MJJ": {
+      "acc": 0.6136363636363636,
+      "mae_oni": 0.5849894962971094,
+      "r_oni": 0.7389399607608115,
+      "per_class": {
+        "El_Nino": {
+          "n": 15,
+          "hit": 9,
+          "recall": 0.6
+        },
+        "La_Nina": {
+          "n": 16,
+          "hit": 10,
+          "recall": 0.625
+        },
+        "Neutral": {
+          "n": 13,
+          "hit": 8,
+          "recall": 0.6153846153846154
+        }
+      },
+      "clim_acc": 0.36363636363636365,
+      "class_counts": {
+        "Neutral": 13,
+        "El_Nino": 15,
+        "La_Nina": 16
+      }
+    },
+    "A_full_ONI_MJJ+trend": {
+      "acc": 0.6136363636363636,
+      "mae_oni": 0.48321016246318715,
+      "r_oni": 0.8444613113286803,
+      "per_class": {
+        "El_Nino": {
+          "n": 15,
+          "hit": 9,
+          "recall": 0.6
+        },
+        "La_Nina": {
+          "n": 16,
+          "hit": 8,
+          "recall": 0.5
+        },
+        "Neutral": {
+          "n": 13,
+          "hit": 10,
+          "recall": 0.7692307692307693
+        }
+      },
+      "clim_acc": 0.36363636363636365,
+      "class_counts": {
+        "Neutral": 13,
+        "El_Nino": 15,
+        "La_Nina": 16
+      }
+    },
+    "B1_A_full+africa_lean": {
+      "acc": 0.5454545454545454,
+      "mae_oni": 0.5135554351711445,
+      "r_oni": 0.8293199866904304,
+      "per_class": {
+        "El_Nino": {
+          "n": 15,
+          "hit": 9,
+          "recall": 0.6
+        },
+        "La_Nina": {
+          "n": 16,
+          "hit": 8,
+          "recall": 0.5
+        },
+        "Neutral": {
+          "n": 13,
+          "hit": 7,
+          "recall": 0.5384615384615384
+        }
+      },
+      "clim_acc": 0.36363636363636365,
+      "class_counts": {
+        "Neutral": 13,
+        "El_Nino": 15,
+        "La_Nina": 16
+      }
+    },
+    "B2_A_full+africa_full": {
+      "acc": 0.5681818181818182,
+      "mae_oni": 0.498695913848243,
+      "r_oni": 0.8304729598550465,
+      "per_class": {
+        "El_Nino": {
+          "n": 15,
+          "hit": 10,
+          "recall": 0.6666666666666666
+        },
+        "La_Nina": {
+          "n": 16,
+          "hit": 9,
+          "recall": 0.5625
+        },
+        "Neutral": {
+          "n": 13,
+          "hit": 6,
+          "recall": 0.46153846153846156
+        }
+      },
+      "clim_acc": 0.36363636363636365,
+      "class_counts": {
+        "Neutral": 13,
+        "El_Nino": 15,
+        "La_Nina": 16
+      }
+    },
+    "C_africa_only": {
+      "acc": 0.4318181818181818,
+      "mae_oni": 0.6676572356620123,
+      "r_oni": 0.6718370058738627,
+      "per_class": {
+        "El_Nino": {
+          "n": 15,
+          "hit": 8,
+          "recall": 0.5333333333333333
+        },
+        "La_Nina": {
+          "n": 16,
+          "hit": 6,
+          "recall": 0.375
+        },
+        "Neutral": {
+          "n": 13,
+          "hit": 5,
+          "recall": 0.38461538461538464
+        }
+      },
+      "clim_acc": 0.36363636363636365,
+      "class_counts": {
+        "Neutral": 13,
+        "El_Nino": 15,
+        "La_Nina": 16
+      }
+    }
+  },
+  "delta_vs_A_full": {
+    "B1_minus_A_full_acc": -0.06818181818181823,
+    "B2_minus_A_full_acc": -0.045454545454545414,
+    "B1_perm_p_one_sided": 0.977,
+    "B2_perm_p_one_sided": 0.853,
+    "n_perm": 1000
+  },
+  "half_period_stability": {
+    "A_full": {
+      "1982-2003": {
+        "acc": 0.7272727272727273,
+        "mae": 0.4601474901983545
+      },
+      "2004-2025": {
+        "acc": 0.5,
+        "mae": 0.5062728347280199
+      }
+    },
+    "B1": {
+      "1982-2003": {
+        "acc": 0.6818181818181818,
+        "mae": 0.47662025799405555
+      },
+      "2004-2025": {
+        "acc": 0.4090909090909091,
+        "mae": 0.5504906123482338
+      }
+    },
+    "C_africa_only": {
+      "1982-2003": {
+        "acc": 0.45454545454545453,
+        "mae": 0.6702497892476351
+      },
+      "2004-2025": {
+        "acc": 0.4090909090909091,
+        "mae": 0.6650646820763894
+      }
+    }
+  },
+  "context_monitor_claim": {
+    "note": "operational monitor M1/M4/M6 use z850/rho_700 features — different construction from AS/RHO block here; numbers not directly comparable",
+    "M1": 0.718,
+    "M4": 0.769,
+    "M6": 0.795
+  },
+  "runtime_sec": 9.3
+}

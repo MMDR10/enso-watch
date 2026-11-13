@@ -1,0 +1,179 @@
+{
+ "experiment": "Africa charging → Pacific WWV lead-lag (real-data transmission-path test)",
+ "prompted_by": "MKP 2026-11-13: ENSO未爆是非洲一直有傳能量入去又什解釋 → 傳導路徑 falsifiable 測試",
+ "data": {
+  "africa": "africa_features_528.npz (ERA5 850hPa AS/RHO, 528 months)",
+  "wwv": "NOAA PMEL wwv.dat 1980-01→2026-09 (anomaly column)",
+  "real_data_only": true
+ },
+ "design": {
+  "target": "DJF WWV anomaly (Dec Y, Jan-Feb Y+1)",
+  "forecast_time": "end of July Y (charging window complete)",
+  "model": "OLS, LOO over 44 winters",
+  "perm": "block shuffle 1000x seed 20261113",
+  "falsification": "PASS: Africa leads (lag>0) + LOO increment p<0.05; DEAD: peak lag<=0; NULL: lead but no increment"
+ },
+ "test1_leadlag": {
+  "rows": [
+   {
+    "lag_m": -5,
+    "month": "lag-5",
+    "r_AS_wwv": -0.278,
+    "n": 44
+   },
+   {
+    "lag_m": -4,
+    "month": "lag-4",
+    "r_AS_wwv": -0.295,
+    "n": 44
+   },
+   {
+    "lag_m": -3,
+    "month": "lag-3",
+    "r_AS_wwv": -0.366,
+    "n": 44
+   },
+   {
+    "lag_m": -2,
+    "month": "lag-2",
+    "r_AS_wwv": -0.401,
+    "n": 44
+   },
+   {
+    "lag_m": -1,
+    "month": "lag-1",
+    "r_AS_wwv": -0.391,
+    "n": 44
+   },
+   {
+    "lag_m": 0,
+    "month": "lag0",
+    "r_AS_wwv": -0.335,
+    "n": 44
+   },
+   {
+    "lag_m": 1,
+    "month": "lag1",
+    "r_AS_wwv": -0.294,
+    "n": 44
+   },
+   {
+    "lag_m": 2,
+    "month": "lag2",
+    "r_AS_wwv": -0.262,
+    "n": 44
+   },
+   {
+    "lag_m": 3,
+    "month": "lag3",
+    "r_AS_wwv": -0.297,
+    "n": 44
+   },
+   {
+    "lag_m": 4,
+    "month": "lag4",
+    "r_AS_wwv": -0.178,
+    "n": 44
+   },
+   {
+    "lag_m": 5,
+    "month": "lag5",
+    "r_AS_wwv": -0.005,
+    "n": 44
+   },
+   {
+    "lag_m": 6,
+    "month": "lag6",
+    "r_AS_wwv": 0.217,
+    "n": 44
+   },
+   {
+    "lag_m": 7,
+    "month": "lag7",
+    "r_AS_wwv": 0.383,
+    "n": 44
+   },
+   {
+    "lag_m": 8,
+    "month": "lag8",
+    "r_AS_wwv": 0.521,
+    "n": 44
+   },
+   {
+    "lag_m": 9,
+    "month": "lag9",
+    "r_AS_wwv": 0.528,
+    "n": 44
+   },
+   {
+    "lag_m": 10,
+    "month": "lag10",
+    "r_AS_wwv": 0.548,
+    "n": 44
+   },
+   {
+    "lag_m": 11,
+    "month": "lag11",
+    "r_AS_wwv": 0.475,
+    "n": 44
+   },
+   {
+    "lag_m": 12,
+    "month": "lag12",
+    "r_AS_wwv": 0.425,
+    "n": 44
+   },
+   {
+    "lag_m": 13,
+    "month": "lag13",
+    "r_AS_wwv": 0.441,
+    "n": 44
+   },
+   {
+    "lag_m": 14,
+    "month": "lag14",
+    "r_AS_wwv": 0.394,
+    "n": 44
+   },
+   {
+    "lag_m": 15,
+    "month": "lag15",
+    "r_AS_wwv": 0.36,
+    "n": 43
+   },
+   {
+    "lag_m": 16,
+    "month": "lag16",
+    "r_AS_wwv": 0.349,
+    "n": 43
+   },
+   {
+    "lag_m": 17,
+    "month": "lag17",
+    "r_AS_wwv": 0.26,
+    "n": 43
+   }
+  ],
+  "peak": {
+   "lag_m": 10,
+   "month": "lag10",
+   "r_AS_wwv": 0.548,
+   "n": 44
+  }
+ },
+ "test2_loo": {
+  "n": 44,
+  "A_full_r": 0.482,
+  "A_full_mae": 75722506556555.92,
+  "B_plus_africa_r": 0.448,
+  "B_plus_africa_mae": 77395043366499.61,
+  "delta_r": -0.034,
+  "perm_p": 0.903,
+  "null_r_mean": 0.449
+ },
+ "test3_direct": {
+  "corr_AS_MJJ_djf_wwv": 0.226,
+  "corr_RHO_MJJ_djf_wwv": -0.358
+ },
+ "verdict": "NULL — 非洲領先但增量唔過 permutation：海洋慢路未證實（信息冗餘）"
+}
