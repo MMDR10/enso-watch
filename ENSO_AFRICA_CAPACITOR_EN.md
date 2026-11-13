@@ -1,12 +1,25 @@
 # Africa Capacitor Model: Predicting ENSO 6 Months Ahead with 850 hPa Geopotential Height
 
+> ## 📌 Update v3 (2026-11-13) — Claim-Status Annotations (real-data audits)
+>
+> Post-publication tests (all real data) qualify the headline claims below — see the
+> claim-status table at **Update v3** at the end of this paper. Summary: the Africa
+> features carry **real** information about winter ENSO/WWV, but (1) their **incremental**
+> forecast value over persistence baselines is **not established** (AS/RHO construction:
+> negative increment, permutation p=0.977); (2) the first operational forecast was
+> **low-difficulty** and cannot count as validation; (3) "coupling" is softened to
+> **correlation** (transmission path unverified); (4) the MJO claim is **undetermined**.
+> **The Africa prediction chain has not yet entered the prediction chain** — the monitor
+> retains observational value. Nothing here is retracted as false; the corrections are
+> about *strength and positioning* of claims.
+
 **Author: DR · 2026-08-27 · CC BY 4.0**
 
 ---
 
 ## Abstract
 
-We present a minimal ENSO prediction model: using 850 hPa geopotential height over the Africa–Indian Ocean region (May–July mean) as a "capacitor charge" to predict winter ENSO state 6 months ahead. Leave-one-out cross-validation over 39 years (1982–2020) shows: El Niño directional accuracy 83.3%, La Niña 76.9%, Neutral 78.6% (nonlinear-enhanced model). The first operational forecast (August 2026) predicts winter El Niño, consistent with current observations (ONI +1.39°C).
+We present a minimal ENSO prediction model: using 850 hPa geopotential height over the Africa–Indian Ocean region (May–July mean) as a "capacitor charge" to predict winter ENSO state 6 months ahead. Leave-one-out cross-validation over 39 years (1982–2020) shows: El Niño directional accuracy 83.3%, La Niña 76.9%, Neutral 78.6% (nonlinear-enhanced model). The first operational forecast (August 2026) predicts winter El Niño, consistent with current observations (ONI +1.39°C). **[Update v3: standalone LOO skill is real but redundant with persistence — incremental value not established; the Aug-2026 forecast was low-difficulty (El Niño already active in the charging window) and is not a validation.]**
 
 ---
 
@@ -52,7 +65,7 @@ Phase-stratified analysis reveals significant asymmetry:
 | Neutral | +0.607 | 0.021 | 14 |
 | El Niño | +0.283 | 0.373 | 12 |
 
-Africa→ENSO coupling is strongest during La Niña. Physical reason: during La Niña, the Walker circulation strengthens, the Africa capacitor charges more fully (May La Niña-year mean 122199.9 m²/s² vs El Niño-year 122014.8), forming a positive feedback loop.
+Africa→ENSO coupling is strongest during La Niña. **[Update v3: "coupling" → *correlation*; transmission path unverified — direction Africa→ENSO vs common forcing undetermined.]** Physical reason: during La Niña, the Walker circulation strengthens, the Africa capacitor charges more fully (May La Niña-year mean 122199.9 m²/s² vs El Niño-year 122014.8), forming a positive feedback loop.
 
 ---
 
@@ -102,7 +115,7 @@ Monthly MJO analysis (p=0.679) was a negative result. Using OOMI (Extended OLR M
 | Strong MJO fraction | **p<0.0001** (70.5% vs 57.2%) | p=0.069 ns |
 | Phase distribution | p=0.53 ns | p=0.81 ns |
 
-**MJO is significantly enhanced before El Niño onset** (under non-filtered full-year index OOMI), with the effect being amplitude-driven (not phase-specific). Physical mechanism: weakened Walker circulation before El Niño → more active convection → stronger MJO, consistent with Bjerknes feedback.
+**MJO is significantly enhanced before El Niño onset** (under non-filtered full-year index OOMI), with the effect being amplitude-driven (not phase-specific). **[Update v3: 🔄 undetermined — RMM vs OOMI give opposite directions; pending a third standard-RMM validation (status 2026-09-19).]** Physical mechanism: weakened Walker circulation before El Niño → more active convection → stronger MJO, consistent with Bjerknes feedback.
 
 **Methodological lesson**: Using RMM* (LIM-filtered, Nov-Apr only) yielded the opposite conclusion (MJO suppressed before La Niña). The data processing method itself can manufacture signals — the LIM filter removes ENSO variability while distorting the MJO-ENSO relationship, and the Nov-Apr coverage misses the critical May–July ENSO onset window. OOMI (full-year, no ENSO filter) results are physically more plausible.
 
@@ -185,3 +198,43 @@ Mainstream models essentially abandon Neutral (~50%), relying on El Niño + La N
 - Analysis scripts: `projects/enso/africa_capacitor_deep3.py`, `africa_capacitor_nonlinear_predictor.py`, `mjo_daily_enso_onset_v2.py`, `enso_operational_pipeline.py`
 - Results: JSON files under `projects/enso/output/`
 - ERA5 data: `/tmp/africa_enso_3d_full_year/` (528 files)
+
+
+---
+
+## Update v3 (2026-11-13): Claim-Status Table + New Transmission-Path Test (real data)
+
+### Claim status (all audits use real data only)
+
+| Claim (as published 2026-08-27) | Status | Evidence |
+|---|---|---|
+| 850 hPa charging (May–Jul) predicts winter ENSO 6 months ahead (r=0.621, LOO 71.8%) | **Qualified — standalone skill real, incremental value NOT established** | 2026-11-09 A/B test (LOO, 44 winters, block-shuffle permutation 1000×): adding the Africa block to ONI-persistence+trend gives **negative increment** (B1 Δacc −6.8pp, perm p=0.977; B2 −4.5pp, p=0.853). Africa standalone r=0.672 — real information, but a weak shadow of persistence (0.844). z850-construction A/B pending (raw data rebuild). |
+| First operational forecast (Aug 2026) = validation | **Low-difficulty — not a validation** | El Niño was already active during the charging window (ONI +1.39 in MJJ 2026); predicting winter El Niño from it is a low-difficulty call. |
+| La Niña **coupling** strongest (r=0.765, p=0.002) | **Correlation stands; "coupling" softened to *correlation*** | Transmission path unverified; direction Africa→ENSO vs common forcing undetermined (2026-11-09 principle: structure real, transmission mode unknown). |
+| MJO enhanced before El Niño (OOMI, p<0.0001) | **🔄 Undetermined** | RMM vs OOMI give opposite directions (2026-09-19 status); pending third standard-RMM validation. |
+| Overall: "Nonlinear Prediction" pipeline | **Positioning corrected** | "The Africa prediction chain has not yet entered the prediction chain; the monitor continues to produce data (observational value) but cannot claim predictive increment." (2026-11-09 verdict) |
+
+### NEW — Africa charging → Pacific WWV lead-lag test (2026-11-13, real data)
+
+Does the Africa charging state feed the Pacific warm-water volume (the proposed slow
+oceanic transmission path)? Data: ERA5-derived Africa AS/RHO MJJ features
+(`africa_features_528.npz`) vs NOAA PMEL Warm Water Volume anomaly (1980-01→2026-09).
+Pre-registered criteria: PASS = Africa leads WWV at positive lag AND LOO increment beats
+permutation (p<0.05); DEAD = peak at lag ≤ 0; NULL = lead but no increment.
+
+| Test | Result |
+|---|---|
+| Lead-lag curve corr(AS_MJJ(Y), WWV(Y+k)) | Negative same-year (min −0.40 @ −2 m), crossing zero ~+5 m, positive peak **+0.548 @ +10 m** (Africa leads WWV by ~10 months) |
+| LOO increment on DJF WWV anomaly (n=44) | Baseline (WWV MJJ+trend) r=0.482; +Africa block r=0.448 (**Δr=−0.034**); permutation p=**0.903** — worse than random |
+| Partial control (the decisive one) | corr drops **+0.548 → +0.243 (n.s.)** after controlling DJF ONI — the "lead" is **mostly ENSO-phase following** |
+
+**Verdict (pre-registered): NULL — the Africa→WWV oceanic slow path is not established.**
+The apparent 10-month lead is largely the ENSO recharge-discharge oscillator (Africa
+tracks the phase; WWV oscillates afterwards). Consistent with the 2026-11-09 A/B verdict
+("Africa chain follows, does not lead"). The transmission path remains **open** —
+850 hPa and WWV domains both show no incremental evidence; other channels (e.g. ocean
+heat-content/ITF paths) remain untested.
+
+**Files added:** `scripts_ab_africa_skill.py` + `ab_africa_skill.json` (11-09 A/B),
+`africa_wwv_leadlag.py` + `africa_wwv_leadlag.json`, `africa_wwv_partial_control.py` +
+`africa_wwv_partial_control.json`, `wwv.dat` (NOAA PMEL source).

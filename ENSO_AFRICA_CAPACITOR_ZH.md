@@ -1,12 +1,21 @@
 # Africa 電容模型：用 850hPa 位勢高度提前 6 個月預測 ENSO
 
+> ## 📌 Update v3（2026-11-13）— Claim 狀態註記（真數據審計）
+>
+> 出版後測試（全部真數據）對以下核心主張作出限定 —— 詳見文末 **Update v3** claim 狀態表。
+> 摘要：非洲特徵帶住**真**嘅 winter ENSO/WWV 信息，但 (1) 相對 persistence 基準嘅
+> **增量**預測價值**未確立**（AS/RHO 構造：負增量，permutation p=0.977）；(2) 首個
+> operational 預測係**低難度**，唔可以當驗證；(3)「coupling」軟化為 **correlation**
+> （傳導路徑未驗證）；(4) MJO 主張為**未定論**。**非洲預測鏈仍未入到預測鏈** ——
+> monitor 保留觀測價值。本文並無任何主張被撤回為虛假；修正嘅係主張嘅*強度同定位*。
+
 **作者：DR · 2026-08-27 · CC BY 4.0**
 
 ---
 
 ## 摘要
 
-我們提出一個極簡 ENSO 預測模型：用非洲-印度洋區域 850 hPa 位勢高度（5–7 月平均）作為「電容充電量」，提前 6 個月預測冬季 ENSO 狀態。39 年（1982–2020）留一交叉驗證顯示：El Niño 方向正確率 83.3%，La Niña 76.9%，Neutral 78.6%（非線性增強模型）。2026 年 operational 首測預測冬季 El Niño，與目前觀測一致（ONI +1.39°C）。
+我們提出一個極簡 ENSO 預測模型：用非洲-印度洋區域 850 hPa 位勢高度（5–7 月平均）作為「電容充電量」，提前 6 個月預測冬季 ENSO 狀態。39 年（1982–2020）留一交叉驗證顯示：El Niño 方向正確率 83.3%，La Niña 76.9%，Neutral 78.6%（非線性增強模型）。2026 年 operational 首測預測冬季 El Niño，與目前觀測一致（ONI +1.39°C）。**【Update v3：standalone LOO skill 係真但同 persistence 冗餘 —— 增量價值未確立；2026-08 首測係低難度（充電窗時 El Niño 已起），唔算驗證。】**
 
 ---
 
@@ -52,7 +61,7 @@
 | Neutral | +0.607 | 0.021 | 14 |
 | El Niño | +0.283 | 0.373 | 12 |
 
-La Niña 期間 Africa→ENSO 耦合最強。物理原因：La Niña 期間 Walker 環流增強，Africa 電容充電更滿（5 月 La Niña 年平均 122199.9 m²/s² vs El Niño 年 122014.8），形成正反饋。
+La Niña 期間 Africa→ENSO 耦合最強。**【Update v3：「耦合」→「相關（correlation）」；傳導路徑未驗證 —— 方向 Africa→ENSO 定共同驅動未定。】**物理原因：La Niña 期間 Walker 環流增強，Africa 電容充電更滿（5 月 La Niña 年平均 122199.9 m²/s² vs El Niño 年 122014.8），形成正反饋。
 
 ---
 
@@ -102,7 +111,7 @@ Neutral 改善最大（+21.5 個百分點），從接近隨機提升到實用水
 | Strong MJO 比例 | **p<0.0001** (70.5% vs 57.2%) | p=0.069 ns |
 | Phase 分佈 | p=0.53 ns | p=0.81 ns |
 
-**El Niño 前 MJO 顯著增強**（在非濾波全日圈指標 OOMI 下），效應為 amplitude-driven（唔係 phase-specific）。物理機制：El Niño 前 Walker 減弱 → 對流活動更活躍 → MJO 增強，與 Bjerknes feedback 一致。
+**El Niño 前 MJO 顯著增強**（在非濾波全日圈指標 OOMI 下），效應為 amplitude-driven（唔係 phase-specific）。**【Update v3：🔄 未定論 —— RMM 同 OOMI 方向相反，待第三次標準 RMM 驗證（2026-09-19 狀態）。】**物理機制：El Niño 前 Walker 減弱 → 對流活動更活躍 → MJO 增強，與 Bjerknes feedback 一致。
 
 **方法教訓**：用 RMM*（LIM-filtered, Nov-Apr only）得出相反結論（La Niña 前 MJO 壓制）。數據處理方法本身可以製造信號——LIM filter 去除 ENSO 變異的同時扭曲了 MJO-ENSO 關係，Nov-Apr 覆蓋缺失了 ENSO onset 的關鍵 5–7 月窗口。OOMI（全日圈、無 ENSO filter）結果物理上更合理。
 
@@ -185,3 +194,40 @@ Neutral 改善最大（+21.5 個百分點），從接近隨機提升到實用水
 - 分析腳本：`projects/enso/africa_capacitor_deep3.py`, `africa_capacitor_nonlinear_predictor.py`, `mjo_daily_enso_onset_v2.py`, `enso_operational_pipeline.py`
 - 結果：`projects/enso/output/` 目錄下各 JSON 文件
 - ERA5 數據：`/tmp/africa_enso_3d_full_year/`（528 文件）
+
+
+---
+
+## Update v3（2026-11-13）：Claim 狀態表 + 新傳導路徑測試（真數據）
+
+### Claim 狀態（全部審計只用真數據）
+
+| 主張（2026-08-27 出版時） | 狀態 | 證據 |
+|---|---|---|
+| 850hPa 充電（5–7月）提前 6 個月預測 winter ENSO（r=0.621，LOO 71.8%） | **限定 —— standalone skill 係真，增量價值未確立** | 2026-11-09 A/B 測試（LOO 44 winters，block-shuffle permutation 1000×）：非洲 block 加落 ONI persistence+trend 係**負增量**（B1 Δacc −6.8pp，perm p=0.977；B2 −4.5pp，p=0.853）。非洲獨跑 r=0.672 —— 信息係真，但係 persistence（0.844）嘅弱影子。z850 構造 A/B 掛起（原始數據待重建）。 |
+| 首個 operational 預測（2026-08）= 驗證 | **低難度 —— 唔算驗證** | 充電窗時 El Niño 已起（2026 MJJ ONI +1.39），預測冬季 El Niño 係低難度之舉。 |
+| La Niña **耦合**最強（r=0.765，p=0.002） | **相關成立；「耦合」軟化為「相關」** | 傳導路徑未驗證；方向 Africa→ENSO 定共同驅動未定（2026-11-09 原則：結構真、傳導方式未明）。 |
+| MJO 喺 El Niño 前增強（OOMI，p<0.0001） | **🔄 未定論** | RMM 同 OOMI 方向相反（2026-09-19 狀態）；待第三次標準 RMM 驗證。 |
+| 總體：「Nonlinear Prediction」pipeline | **定位修正** | 「非洲預測鏈仍未入到預測鏈；monitor 繼續出數（觀測價值）但唔可以話有預測增量」（2026-11-09 判決）。 |
+
+### 新測試 —— 非洲充電 → 太平洋 WWV lead-lag（2026-11-13，真數據）
+
+非洲充電態有冇餵入太平洋暖水體積（WWV，提議中嘅海洋慢傳導路）？數據：ERA5 非洲
+AS/RHO MJJ 特徵（`africa_features_528.npz`）vs NOAA PMEL WWV 月度異常（1980-01→2026-09）。
+預登記判據：PASS = 非洲領先（lag>0）且 LOO 增量過 permutation（p<0.05）；DEAD = 峰值喺
+lag≤0；NULL = 領先但冇增量。
+
+| 測試 | 結果 |
+|---|---|
+| Lead-lag 曲線 corr(AS_MJJ(Y), WWV(Y+k)) | 同年負相關（min −0.40 @ −2 月），~+5 月過零，正峰 **+0.548 @ +10 月**（非洲領先 WWV 約 10 個月） |
+| DJF WWV 異常 LOO 增量（n=44） | 基準（WWV MJJ+trend）r=0.482；+非洲 block r=0.448（**Δr=−0.034**）；permutation p=**0.903** —— 比隨機仲差 |
+| 偏相關控制（決定性） | 控制 DJF ONI 後 corr **+0.548 → +0.243（不顯著）** —— 個「lead」大部分係 **ENSO 相位跟隨** |
+
+**判決（預登記）：NULL —— 非洲→WWV 海洋慢路未確立。** 嗰個 10 個月 lead 主要係 ENSO
+充放振盪本身（非洲跟相位、WWV 隨後振盪）。同 2026-11-09 A/B 判決一致（「非洲鏈跟隨
+唔領先」）。傳導路徑依然 **open** —— 850hPa 域同 WWV 域都冇增量證據；其他通道
+（海洋熱含量/ITF 路徑等）未測。
+
+**新增檔案：** `scripts_ab_africa_skill.py` + `ab_africa_skill.json`（11-09 A/B）、
+`africa_wwv_leadlag.py` + `africa_wwv_leadlag.json`、`africa_wwv_partial_control.py` +
+`africa_wwv_partial_control.json`、`wwv.dat`（NOAA PMEL 原始數據）。
