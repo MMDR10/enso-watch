@@ -1,11 +1,11 @@
 {
-  "generated": "2026-11-09 11:23 UTC",
+  "generated": "2026-11-15 13:44 UTC",
   "source": "ERA5 reanalysis single-levels via CDS API",
   "field": "wind stress curl τ (bulk formula, standardized)",
-  "month": "2026-09",
+  "month": "2026-10",
   "grid": {
-    "nlat": 241,
-    "nlon": 681,
+    "nlat": 121,
+    "nlon": 341,
     "area": [
       30.0,
       120.0,
@@ -14,17 +14,17 @@
     ]
   },
   "morse": {
-    "saddle_frac": 0.58488,
-    "peak_frac": 0.20801,
-    "trough_frac": 0.20711,
-    "n_valid": 147709
+    "saddle_frac": 0.58188,
+    "peak_frac": 0.20983,
+    "trough_frac": 0.20829,
+    "n_valid": 37135
   },
   "correlations": {
-    "spearman_density_curl": 0.2699
+    "spearman_density_curl": 0.2766
   },
   "regional_density": {
-    "east_end": 0.50823,
-    "nino34": 0.5107
+    "east_end": 0.46714,
+    "nino34": 0.47402
   },
   "baselines": {
     "saddle_frac_phase35": 0.575,
