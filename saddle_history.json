@@ -29,11 +29,11 @@
     },
     {
       "month": "2026-10",
-      "saddle_frac": 0.56419,
-      "spearman_density_rho": 0.1348,
-      "spearman_density_grad": 0.1105,
-      "east_end_density": 0.52192,
-      "nino34_density": 0.44136,
+      "saddle_frac": 0.56303,
+      "spearman_density_rho": 0.1408,
+      "spearman_density_grad": 0.1139,
+      "east_end_density": 0.52228,
+      "nino34_density": 0.43902,
       "field": "sst_anomaly"
     }
   ]
